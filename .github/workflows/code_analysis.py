@@ -6,6 +6,7 @@ import os
 def analyze_code(code):
     tree = ast.parse(code)
     results = {
+        "lists": False,
         "dictionaries": False,
         "tuples": False,
         "slicing": False,
@@ -33,6 +34,8 @@ def analyze_code(code):
             results["strings"] = True
         elif isinstance(node, ast.Set):
             results["sets"] = True
+        elif isinstance(node, ast.List):
+            results["lists"] = True
         elif isinstance(node, ast.Lambda):
             results["lambda_functions"] = True
         elif isinstance(node, ast.Call):
@@ -69,6 +72,7 @@ def analyze_code(code):
 
 def analyze_directory(directory):
     final_results = {
+        "lists": False,
         "dictionaries": False,
         "tuples": False,
         "slicing": False,
