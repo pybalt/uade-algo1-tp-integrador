@@ -1,8 +1,9 @@
 import ast
 import re
 import sys
+import os
 
-def analyze_code(code, check):
+def analyze_code(code):
     tree = ast.parse(code)
     results = {
         "dictionaries": False,
@@ -19,7 +20,7 @@ def analyze_code(code, check):
         "file_operations": False,
         "regex": False,
     }
-    
+
     # AST Analysis
     for node in ast.walk(tree):
         if isinstance(node, ast.Dict):
@@ -67,17 +68,44 @@ def analyze_code(code, check):
             if is_recursive(node):
                 results["recursion"] = True
     
-    return results[check]
+    return results
 
-# Run the analysis on the specified file
+def analyze_directory(directory):
+    final_results = {
+        "dictionaries": False,
+        "tuples": False,
+        "slicing": False,
+        "strings": False,
+        "sets": False,
+        "recursion": False,
+        "lambda_functions": False,
+        "map": False,
+        "filter": False,
+        "reduce": False,
+        "exceptions": False,
+        "file_operations": False,
+        "regex": False,
+    }
+
+    for root, _, files in os.walk(directory):
+        for file in files:
+            if file.endswith(".py"):
+                with open(os.path.join(root, file), "r") as f:
+                    code = f.read()
+                    file_results = analyze_code(code)
+                    for key in final_results:
+                        final_results[key] = final_results[key] or file_results[key]
+
+    return final_results
+
 if __name__ == "__main__":
-    with open("your_code.py", "r") as file:
-        code = file.read()
+    directory = "."
+    check = sys.argv[1] 
+    results = analyze_directory(directory)
 
-    check = sys.argv[1]  # Element to check passed as an argument
-    if analyze_code(code, check):
+    if results[check]:
         print(f"{check} detected")
-        sys.exit(0)  # Success
+        sys.exit(0)
     else:
         print(f"{check} not detected")
-        sys.exit(1)  # Failure
+        sys.exit(1)
