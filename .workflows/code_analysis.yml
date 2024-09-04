@@ -1,0 +1,64 @@
+name: Code Analysis
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: pip install ast
+
+    - name: Check for dictionaries
+      run: python code_analysis.py dictionaries
+
+    - name: Check for tuples
+      run: python code_analysis.py tuples
+
+    - name: Check for slicing
+      run: python code_analysis.py slicing
+
+    - name: Check for strings
+      run: python code_analysis.py strings
+
+    - name: Check for sets
+      run: python code_analysis.py sets
+
+    - name: Check for recursion
+      run: python code_analysis.py recursion
+
+    - name: Check for lambda functions
+      run: python code_analysis.py lambda_functions
+
+    - name: Check for map
+      run: python code_analysis.py map
+
+    - name: Check for filter
+      run: python code_analysis.py filter
+
+    - name: Check for reduce
+      run: python code_analysis.py reduce
+
+    - name: Check for exceptions
+      run: python code_analysis.py exceptions
+
+    - name: Check for file operations
+      run: python code_analysis.py file_operations
+
+    - name: Check for regex
+      run: python code_analysis.py regex
