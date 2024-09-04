@@ -11,6 +11,10 @@ on:
 jobs:
   analyze:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        check: [dictionaries, tuples, slicing, strings, sets, recursion, lambda_functions, map, filter, reduce, exceptions, file_operations, regex]
 
     steps:
     - name: Check out the repository
@@ -21,41 +25,5 @@ jobs:
       with:
         python-version: '3.x'
 
-    - name: Check for dictionaries
-      run: python .github/workflows/code_analysis.py dictionaries
-
-    - name: Check for tuples
-      run: python .github/workflows/code_analysis.py tuples
-
-    - name: Check for slicing
-      run: python .github/workflows/code_analysis.py slicing
-
-    - name: Check for strings
-      run: python .github/workflows/code_analysis.py strings
-
-    - name: Check for sets
-      run: python .github/workflows/code_analysis.py sets
-
-    - name: Check for recursion
-      run: python .github/workflows/code_analysis.py recursion
-
-    - name: Check for lambda functions
-      run: python .github/workflows/code_analysis.py lambda_functions
-
-    - name: Check for map
-      run: python .github/workflows/code_analysis.py map
-
-    - name: Check for filter
-      run: python .github/workflows/code_analysis.py filter
-
-    - name: Check for reduce
-      run: python .github/workflows/code_analysis.py reduce
-
-    - name: Check for exceptions
-      run: python .github/workflows/code_analysis.py exceptions
-
-    - name: Check for file operations
-      run: python .github/workflows/code_analysis.py file_operations
-
-    - name: Check for regex
-      run: python .github/workflows/code_analysis.py regex
+    - name: Run code analysis for ${{ matrix.check }}
+      run: python .github/workflows/code_analysis.py ${{ matrix.check }}
