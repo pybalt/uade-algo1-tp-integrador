@@ -21,7 +21,6 @@ def analyze_code(code):
         "regex": False,
     }
 
-    # AST Analysis
     for node in ast.walk(tree):
         if isinstance(node, ast.Dict):
             results["dictionaries"] = True
@@ -50,11 +49,9 @@ def analyze_code(code):
         elif isinstance(node, ast.Try):
             results["exceptions"] = True
 
-    # Regex Analysis
     if re.search(r'\bimport\s+re\b', code):
         results["regex"] = True
-    
-    # Recursion check
+
     def is_recursive(function_def):
         function_name = function_def.name
         for node in ast.walk(function_def):
@@ -88,6 +85,8 @@ def analyze_directory(directory):
     }
 
     for root, _, files in os.walk(directory):
+        if ".github" in root:
+            continue
         for file in files:
             if file.endswith(".py"):
                 with open(os.path.join(root, file), "r") as f:
@@ -100,7 +99,7 @@ def analyze_directory(directory):
 
 if __name__ == "__main__":
     directory = "."
-    check = sys.argv[1] 
+    check = sys.argv[1]
     results = analyze_directory(directory)
 
     if results[check]:
