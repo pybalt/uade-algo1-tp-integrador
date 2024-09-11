@@ -68,16 +68,16 @@ def get_choices() -> dict:
 
 def list_choices(choices: dict) -> None:
     print("Sus opciones son")
-    explanations = {
-        "A": "Listar bases de datos",
-        "B": "Acceder directamente a una base de datos",
-        "exit()": "Salir del programa",
-    }
+    explanations = [
+        ("A", "Listar bases de datos"),
+        ("B", "Acceder directamente a una base de datos"),
+        ("exit()", "Salir del programa"),
+    ]
     
     assert len(explanations) == len(choices) # For development purposes. Delete before sprint 1.
 
-    for key in explanations:
-        print(f"\t{key}: {explanations[key]}")
+    for key, value in explanations:
+        print(f"\t{key}: {value}")
 
 
 def handle_options(choices) -> str:
