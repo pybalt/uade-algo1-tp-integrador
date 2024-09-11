@@ -34,7 +34,7 @@ def list_databases(directory) -> None:
         print(db)
 
 
-def access_database(directory): 
+def access_database(directory):
     """
     Accesses a database in the given directory.
 
@@ -52,8 +52,10 @@ def access_database(directory):
     print(f"Accediendo a la base de datos {database_name}")
     return directory[database_name]
 
+
 def exit():
     print("Saliendo del programa...")
+
 
 def get_choices() -> dict:
     """
@@ -80,8 +82,10 @@ def list_choices(choices: dict) -> None:
         ("B", "Acceder directamente a una base de datos"),
         ("exit()", "Salir del programa"),
     ]
-    
-    assert len(explanations) == len(choices) # For development purposes. Delete before sprint 1.
+
+    assert len(explanations) == len(
+        choices
+    ), "Las opciones deben estar debidamente explicadas al usuario. El número de opciones no coincide con el número de explicaciones."  # For development purposes. Delete before sprint 1.
 
     for key, value in explanations:
         print(f"\t{key}: {value}")
