@@ -67,6 +67,13 @@ def get_choices() -> dict:
 
 
 def list_choices(choices: dict) -> None:
+    """
+    Prints the available choices to the console.
+    Args:
+        choices (dict): A dictionary containing the available choices.
+    Returns:
+        None
+    """
     print("Sus opciones son")
     explanations = [
         ("A", "Listar bases de datos"),
@@ -81,7 +88,21 @@ def list_choices(choices: dict) -> None:
 
 
 def handle_options(choices) -> str:
-
+    """
+    Handles the user's options and returns the selected option.
+    Parameters:
+    - choices (dict): A dictionary containing the available choices and their corresponding functions.
+    Returns:
+    - str: The selected option.
+    Example:
+    >>> handle_options({'a': function_a, 'b': function_b})
+        a: Explanation A
+        b: Explanation B
+        Select an option
+            --> a
+        ---
+        function_a() will be executed.
+    """
     list_choices(choices)
     user_input = input("Seleccione una opcion\n\t--> ")
 
@@ -93,8 +114,7 @@ def handle_options(choices) -> str:
 
 if __name__ == "__main__":
     """
-    El codigo debajo de este if, es el que define
-    la interaccion con el usuario
+    The code below this if statement defines the interaction with the user.
     """
 
     print("Bienvenidos a la base de datos no relacional de Base Builders!")
