@@ -85,7 +85,7 @@ def list_choices(choices: dict) -> None:
 
     assert len(explanations) == len(
         choices
-    ), "Las opciones deben estar debidamente explicadas al usuario. El número de opciones no coincide con el número de explicaciones."  # For development purposes. Delete before sprint 1.
+    ), "Error. Las opciones deben estar debidamente explicadas al usuario. El número de opciones no coincide con el número de explicaciones."  # For development purposes. Delete before sprint 1.
 
     for key, value in explanations:
         print(f"\t{key}: {value}")
