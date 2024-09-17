@@ -4,9 +4,20 @@ documentos = [
     {"id": "doc3", "contenido": "Documento 3"},
 ]
 
-# Generar listado utilizando comprensión de listas
-listado = [(indice, doc["id"]) for indice, doc in enumerate(documentos)]
+# Función para filtrar por ID
+def filtrar_por_id(documentos):
+    # Solicitar al usuario que ingrese el ID
+    id_usuario = input("Introducir el id del documento: ")
 
-# Imprimir el listado en el formato requerido
-for indice, doc_id in listado:
-    print(f"Índice: {indice}, ID del documento: {doc_id}")
+    # Filtrar el documento que coincide con el ID introducido
+    resultado = [doc for doc in documentos if doc["id"] == id_usuario]
+
+    # Verificar si se encontró un documento o no
+    if resultado:
+        # Mostrar el documento encontrado, con el ID como tupla
+        print({"id": (resultado[0]["id"],), "contenido": resultado[0]["contenido"]})
+    else:
+        print(f"No se encontró ningún documento con el ID: {id_usuario}")
+
+# Llamar a la función
+filtrar_por_id(documentos)
