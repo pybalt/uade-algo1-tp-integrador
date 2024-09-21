@@ -1,13 +1,6 @@
-def get_databases() -> dict:
-    """
-    Retrieves a list of databases.
+import uuid
 
-    Returns:
-        list: A list of databases.
-    """
-    databases = {"pepe": {}}
-    return databases
-
+directory = {}
 
 def create_database(name: str, directory):
     """
@@ -17,8 +10,36 @@ def create_database(name: str, directory):
     - name (str): The name of the database.
     - directory: The directory where the database will be stored.
     """
-    databases[name] = {}
+    directory[name] = {}
 
+def create_document(database: dict) -> None:
+    """
+    Crea un nuevo documento en la base de datos con un ID único y almacena los campos
+    como tuplas.
+
+    Parameters:
+    - database (dict): La base de datos en la que se almacenará el documento.
+    
+    Returns:
+    None
+    """
+
+    document_id = str(uuid.uuid4())
+    document_data = {}
+    
+    while True:
+        field_name = input("Ingrese el nombre del campo (o 'exit()' para terminar): ")
+        if field_name.lower() == 'exit()':
+            break
+        field_value = input(f"Ingrese el valor para el campo '{field_name}': ")
+        
+        document_data[field_name] = field_value
+
+    # Almacenar el documento en la base de datos
+    database[tuple(document_id)] = document_data
+    
+    print(f"\nDocumento creado con ID: {document_id}")
+    print(f"Datos del documento: {document_data}\n")
 
 def list_databases(directory) -> None:
     """
@@ -30,8 +51,8 @@ def list_databases(directory) -> None:
     Returns:
     None
     """
-    for db in directory:
-        print(db)
+    for key, db in enumerate(directory):
+        print(key+1, db)
 
 
 def access_database(directory):
@@ -57,18 +78,7 @@ def exit():
     print("Saliendo del programa...")
 
 
-def get_choices() -> dict:
-    """
-    Returns a dictionary of choices.
-
-    Returns:
-        dict: A dictionary containing the choices.
-    """
-    choices = {"a": list_databases, "b": access_database, "exit()": exit}
-    return choices
-
-
-def list_choices(choices: dict) -> None:
+def list_choices() -> None:
     """
     Prints the available choices to the console.
     Args:
@@ -80,18 +90,51 @@ def list_choices(choices: dict) -> None:
     explanations = [
         ("A", "Listar bases de datos"),
         ("B", "Acceder directamente a una base de datos"),
+        ("C", "Crear una nueva base de datos"),
         ("exit()", "Salir del programa"),
     ]
-
-    assert len(explanations) == len(
-        choices
-    ), "Error. Las opciones deben estar debidamente explicadas al usuario. El número de opciones no coincide con el número de explicaciones."  # For development purposes. Delete before sprint 1.
 
     for key, value in explanations:
         print(f"\t{key}: {value}")
 
+def list_database_choices() -> None:
+    """
+    Prints the available choices to the console.
+    Args:
+        choices (dict): A dictionary containing the available choices.
+    Returns:
+        None
+    """
+    print("Operaciones disponibles:")
+    explanations = [
+        ("1", "Crear documento"),
+        ("exit()", "Volver al menú principal"),
+    ]
 
-def handle_options(choices) -> str:
+    for key, value in explanations:
+        print(f"\t{key}: {value}")
+
+def handle_database_operations(database: dict) -> None:
+    """
+    Provides options to operate within the selected database.
+
+    Parameters:
+    - database (dict): The current database being operated on.
+
+    Returns:
+    None
+    """
+    list_database_choices()
+    option = input("Seleccione una opción:\n\t--> ")
+    while option != "exit()":
+
+        if option == "1":
+            create_document(database)
+
+        list_database_choices()
+        option = input("Seleccione una opción:\n\t--> ")
+
+def handle_options() -> str:
     """
     Handles the user's options and returns the selected option.
     Parameters:
@@ -107,11 +150,19 @@ def handle_options(choices) -> str:
         ---
         function_a() will be executed.
     """
-    list_choices(choices)
-    user_input = input("Seleccione una opcion\n\t--> ")
+    list_choices()
+    user_input = input("Seleccione una opcion\n\t--> ").lower()
 
-    if user_input.lower() in choices:
-        choices[user_input.lower()](databases)
+    if user_input == "a":
+        list_databases(directory)
+    elif user_input == "b":
+        database = access_database(directory)
+        handle_database_operations(database)
+    elif user_input == "c":
+        name = input("Ingrese el nombre de la base de datos: ")
+        create_database(name, directory)
+    elif user_input == "exit()":
+        exit()
 
     return user_input
 
@@ -124,13 +175,12 @@ if __name__ == "__main__":
     print("Bienvenidos a la base de datos no relacional de Base Builders!")
     print("Para continuar, presione una tecla")
     user_input = input("")
-    choices = get_choices()
+
     while user_input != "exit()":
 
-        databases = get_databases()
-        if not databases:
+        if not directory:
             print("No se han creado bases de datos.")
             database_name = input("Ingrese nombre de base de datos.\n\t--> ")
-            create_database(database_name, databases)
+            create_database(database_name, directory)
 
-        user_input = handle_options(choices)
+        user_input = handle_options()
