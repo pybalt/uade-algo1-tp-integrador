@@ -125,9 +125,10 @@ def filtrar_por_id(documentos):
     # Verificar si se encontró un documento o no
     if resultado:
         # Mostrar el documento encontrado, con el ID como tupla
-        print({"id": (resultado[0]["id"],), "contenido": resultado[0]["contenido"]})
+        print({"id": resultado[0]["id"], "contenido": resultado[0]["contenido"]})
     else:
         print(f"No se encontró ningún documento con el ID: {id_usuario}")
+
 
 
 if __name__ == "__main__":
