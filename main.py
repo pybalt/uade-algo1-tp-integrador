@@ -108,11 +108,17 @@ def list_database_choices() -> None:
     print("Operaciones disponibles:")
     explanations = [
         ("1", "Crear documento"),
+        ("2", "Listar documentos"),
         ("exit()", "Volver al menú principal"),
     ]
 
     for key, value in explanations:
         print(f"\t{key}: {value}")
+
+def list_documents(database):
+    for index, document in enumerate(database):
+        print(index+1, database[document])
+
 
 def handle_database_operations(database: dict) -> None:
     """
@@ -130,6 +136,8 @@ def handle_database_operations(database: dict) -> None:
 
         if option == "1":
             create_document(database)
+        if option == "2":
+            list_documents(database)
 
         list_database_choices()
         option = input("Seleccione una opción:\n\t--> ")
