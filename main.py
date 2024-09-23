@@ -41,6 +41,15 @@ def create_document(database: dict) -> None:
     print(f"\nDocumento creado con ID: {document_id}")
     print(f"Datos del documento: {document_data}\n")
 
+def eliminar_documento(database):
+    document_id= input("Ingrese el ID del documento a eliminar: ")
+    if document_id in database:
+        del database[document_id]
+        print(f"Documento con ID: {document_id} eliminado exitosamente.")
+    else:
+        print(f"No se encontró ningún documento con el ID: {document_id}")
+
+
 def list_databases(directory) -> None:
     """
     Prints the names of the databases in the given directory.
