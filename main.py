@@ -279,13 +279,14 @@ def handle_options() -> str:
 
 def filter_documents_by_id(database: dict) -> None:
     """
-    Filtra una lista de documentos por su ID y muestra el documento filtrado.
+    Filters and prints a document from the database based on user input ID.
     Args:
-        documentos (list): Lista de diccionarios, donde cada diccionario representa un documento
-                           con las claves "id" y "contenido".
+        database (dict): A dictionary where keys are document IDs (tuples) and values are document details.
     Returns:
-        None: Esta función no retorna ningún valor. Imprime el documento filtrado o un mensaje
-              indicando que no se encontró ningún documento con el ID proporcionado.
+        None
+    The function prompts the user to input a document ID, filters the document from the database,
+    and prints the document details if found. If no document is found with the given ID, it prints
+    an appropriate message.
     """
 
     id = input("Introducir el id del documento: ")
