@@ -2,6 +2,7 @@ import uuid
 
 directory = {}
 
+
 def create_database(name: str, directory):
     """
     Creates a new database with the given name.
@@ -11,6 +12,7 @@ def create_database(name: str, directory):
     - directory: The directory where the database will be stored.
     """
     directory[name] = {}
+
 
 def parse_value(value: str):
     """
@@ -25,10 +27,11 @@ def parse_value(value: str):
 
     while not parsed_correctly:
         if '.' not in value:
-            print("Formato inválido. El valor debe estar en el formato 'tipo.valor1,valor2,...'")
+            print(
+                "Formato inválido. El valor debe estar en el formato 'tipo.valor1,valor2,...'")
             value = input("Reingrese el valor en el formato correcto: ")
             continue
-        
+
         type_hint, raw_value = value.split('.', 1)
 
         if type_hint == "string":
@@ -66,6 +69,7 @@ def parse_value(value: str):
 
     return parsed_data
 
+
 def create_document(database: dict) -> None:
     """
     Creates a new document with user-provided fields and values, and stores it in the given database.
@@ -84,18 +88,21 @@ def create_document(database: dict) -> None:
     document_id = str(uuid.uuid4())
     document_data = {}
 
-    field_name = input("Ingrese el nombre del campo (o 'exit()' para terminar): ")
+    field_name = input(
+        "Ingrese el nombre del campo (o 'exit()' para terminar): ")
     while field_name.lower() != 'exit()':
         field_value = input(f"Ingrese el valor para el campo '{field_name}': ")
         parsed_value = parse_value(field_value)
         document_data[field_name] = parsed_value
 
-        field_name = input("Ingrese el nombre del campo (o 'exit()' para terminar): ")
+        field_name = input(
+            "Ingrese el nombre del campo (o 'exit()' para terminar): ")
 
     database[tuple(document_id)] = document_data
 
     print(f"\nDocumento creado con ID: {document_id}")
     print(f"Datos del documento: {document_data}\n")
+
 
 def delete_document(database: dict) -> None:
     """
@@ -117,6 +124,7 @@ def delete_document(database: dict) -> None:
         print(f"Documento con ID: {document_id} eliminado exitosamente.")
     else:
         print(f"No se encontró ningún documento con el ID: {document_id}")
+
 
 def list_databases(directory: dict) -> None:
     """
@@ -174,6 +182,7 @@ def list_choices() -> None:
     for key, value in explanations:
         print(f"\t{key}: {value}")
 
+
 def list_database_choices() -> None:
     """
     Prints the available choices to the console.
@@ -193,6 +202,7 @@ def list_database_choices() -> None:
 
     for key, value in explanations:
         print(f"\t{key}: {value}")
+
 
 def list_documents(database: dict) -> None:
     """
@@ -254,6 +264,7 @@ def handle_database_operations(database: dict) -> None:
         list_database_choices()
         option = input("Seleccione una opción:\n\t--> ")
 
+
 def handle_options() -> str:
     """
     Handles the user's options and returns the selected option.
@@ -286,6 +297,7 @@ def handle_options() -> str:
 
     return user_input
 
+
 def filter_documents_by_id(database: dict) -> None:
     """
     Filters and prints a document from the database based on user input ID.
@@ -306,7 +318,6 @@ def filter_documents_by_id(database: dict) -> None:
         print(f"{doc}: \t{database[doc]}")
     else:
         print(f"No se encontró ningún documento con el ID: {id}")
-
 
 
 if __name__ == "__main__":
