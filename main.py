@@ -84,6 +84,12 @@ def create_document(database: dict) -> None:
     document_id = str(uuid.uuid4())
     document_data = {}
 
+    print("Creando un nuevo documento...")
+    print("Los tipos de datos soportados son: string, int, float, tuple, list, set, matrix")
+    print("El formato de entrada es 'tipo.valor1,valor2,...'")
+    print("Para los tipos de datos tales como set, tuple, list y matrix, separe los valores con comas.")
+    print("Ademas, para los tipos de datos como matrix, separe las filas con punto y coma.")
+
     field_name = input("Ingrese el nombre del campo (o 'exit()' para terminar): ")
     while field_name.lower() != 'exit()':
         field_value = input(f"Ingrese el valor para el campo '{field_name}': ")
