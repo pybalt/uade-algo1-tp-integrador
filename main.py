@@ -1,4 +1,3 @@
-from locale import dcgettext
 import uuid
 
 directory = {}
@@ -59,7 +58,7 @@ def delete_document(database: dict) -> None:
     Prompts the user to input the ID of the document to delete. If the document ID exists in the database,
     it deletes the document and prints a success message. If the document ID does not exist, it prints an error message.
     """
-    document_id= input("Ingrese el ID del documento a eliminar: ")
+    document_id = tuple(input("Ingrese el ID del documento a eliminar: "))
     if document_id in database:
         del database[document_id]
         print(f"Documento con ID: {document_id} eliminado exitosamente.")
@@ -134,6 +133,8 @@ def list_database_choices() -> None:
     explanations = [
         ("1", "Crear documento"),
         ("2", "Listar documentos"),
+        ("3", "Eliminar documento"),
+        ("4", "Filtrar documentos por ID"),
         ("exit()", "Volver al menú principal"),
     ]
 
@@ -190,8 +191,12 @@ def handle_database_operations(database: dict) -> None:
 
         if option == "1":
             create_document(database)
-        if option == "2":
+        elif option == "2":
             list_documents(database)
+        elif option == "3":
+            delete_document(database)
+        elif option == "4":
+            filter_documents_by_id(database)
 
         list_database_choices()
         option = input("Seleccione una opción:\n\t--> ")
@@ -228,7 +233,7 @@ def handle_options() -> str:
 
     return user_input
 
-def filter_documents_by_id(document_collection: dict) -> None:
+def filter_documents_by_id(database: dict) -> None:
     """
     Filtra una lista de documentos por su ID y muestra el documento filtrado.
     Args:
@@ -240,10 +245,10 @@ def filter_documents_by_id(document_collection: dict) -> None:
     """
 
     id = input("Introducir el id del documento: ")
-    filtered_documents = [doc for doc in document_collection if doc["id"] == id]
+    filtered_document = [doc_id for doc_id in database if doc_id == tuple(id)][0]
 
-    if filtered_documents:
-        print({"id": filtered_documents[0]["id"], "contenido": filtered_documents[0]["contenido"]})
+    if filtered_document:
+        print(f"{filtered_document}: \t{database[filtered_document]}")
     else:
         print(f"No se encontró ningún documento con el ID: {id}")
 
