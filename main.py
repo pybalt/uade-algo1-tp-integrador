@@ -294,10 +294,11 @@ def filter_documents_by_id(database: dict) -> None:
     """
 
     id = input("Introducir el id del documento: ")
-    filtered_document = [doc_id for doc_id in database if doc_id == tuple(id)][0]
+    filtered_document = [doc_id for doc_id in database if doc_id == tuple(id)]
 
     if filtered_document:
-        print(f"{filtered_document}: \t{database[filtered_document]}")
+        doc = filtered_document[0]
+        print(f"{doc}: \t{database[doc]}")
     else:
         print(f"No se encontró ningún documento con el ID: {id}")
 
