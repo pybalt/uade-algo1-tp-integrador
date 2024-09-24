@@ -1,3 +1,4 @@
+from locale import dcgettext
 import uuid
 
 directory = {}
@@ -43,6 +44,27 @@ def create_document(database: dict) -> None:
     
     print(f"\nDocumento creado con ID: {document_id}")
     print(f"Datos del documento: {document_data}\n")
+
+def delete_document(database: dict) -> None:
+    """
+    Deletes a document from the database based on the provided document ID.
+
+    Args:
+        database (dict): The database from which the document will be deleted. 
+                         The keys are document IDs and the values are the document data.
+
+    Returns:
+        None
+
+    Prompts the user to input the ID of the document to delete. If the document ID exists in the database,
+    it deletes the document and prints a success message. If the document ID does not exist, it prints an error message.
+    """
+    document_id= input("Ingrese el ID del documento a eliminar: ")
+    if document_id in database:
+        del database[document_id]
+        print(f"Documento con ID: {document_id} eliminado exitosamente.")
+    else:
+        print(f"No se encontró ningún documento con el ID: {document_id}")
 
 def list_databases(directory: dict) -> None:
     """
