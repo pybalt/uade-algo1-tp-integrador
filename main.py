@@ -55,6 +55,11 @@ def parse_value(value: str):
             cleaned_values = {v.strip() for v in values}
             parsed_data = {"_type": "set", "value": cleaned_values}
             parsed_correctly = True
+        elif type_hint == "matrix":
+            rows = raw_value.split(';')
+            matrix = [row.split(',') for row in rows]
+            parsed_data = {"_type": "matrix", "value": matrix}
+            parsed_correctly = True
         else:
             print(f"Tipo '{type_hint}' no soportado.")
             value = input("Reingrese el valor en el formato correcto: ")
