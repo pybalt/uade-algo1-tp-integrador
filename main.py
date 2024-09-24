@@ -116,8 +116,20 @@ def list_database_choices() -> None:
         print(f"\t{key}: {value}")
 
 def list_documents(database):
-    for index, document in enumerate(database):
-        print(index+1, database[document])
+    cant=int(input("De a cuantos documentos desea ver: "))
+    #for index, document in enumerate(database):
+        #print(index+1, database[document])
+    total_docs=len(database)
+
+    for i in range(0, total_docs, cant):
+        print(f"Mostrando documentos {i+1} a {min(i + cant, total_docs)}:")
+
+        for index, key in enumerate(list(database.keys())[i:i + cant], start=i + 1):
+            print(f"{index}. {database[key]}")
+
+        continuar = input("Deseas ver más documentos? (s/n): ")
+        if continuar.lower() != "s":
+            break
 
 
 def handle_database_operations(database: dict) -> None:
