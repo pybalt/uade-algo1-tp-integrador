@@ -20,7 +20,10 @@ def parse_value(value: str):
     Returns:
         dict: A dictionary with the parsed value and its associated type.
     """
-    while True:
+    parsed_correctly = False
+    parsed_data = None
+
+    while not parsed_correctly:
         if '.' not in value:
             print("Formato inválido. El valor debe estar en el formato 'tipo.valor1,valor2,...'")
             value = input("Reingrese el valor en el formato correcto: ")
@@ -29,32 +32,34 @@ def parse_value(value: str):
         type_hint, raw_value = value.split('.', 1)
 
         if type_hint == "string":
-            return {"_type": "string", "value": raw_value}
+            parsed_data = {"_type": "string", "value": raw_value}
+            parsed_correctly = True
         elif type_hint == "int":
-            return {"_type": "int", "value": int(raw_value)}
+            parsed_data = {"_type": "int", "value": int(raw_value)}
+            parsed_correctly = True
         elif type_hint == "float":
-            return {"_type": "float", "value": float(raw_value)}
+            parsed_data = {"_type": "float", "value": float(raw_value)}
+            parsed_correctly = True
         elif type_hint == "tuple":
             values = raw_value.split(',')
-            cleaned_values = []
-            for v in values:
-                cleaned_values.append(v.strip())
-            return {"_type": "tuple", "value": tuple(cleaned_values)}
+            cleaned_values = [v.strip() for v in values]
+            parsed_data = {"_type": "tuple", "value": tuple(cleaned_values)}
+            parsed_correctly = True
         elif type_hint == "list":
             values = raw_value.split(',')
-            cleaned_values = []
-            for v in values:
-                cleaned_values.append(v.strip())
-            return {"_type": "list", "value": cleaned_values}
+            cleaned_values = [v.strip() for v in values]
+            parsed_data = {"_type": "list", "value": cleaned_values}
+            parsed_correctly = True
         elif type_hint == "set":
             values = raw_value.split(',')
-            cleaned_values = set()
-            for v in values:
-                cleaned_values.add(v.strip())
-            return {"_type": "set", "value": cleaned_values}
+            cleaned_values = {v.strip() for v in values}
+            parsed_data = {"_type": "set", "value": cleaned_values}
+            parsed_correctly = True
         else:
             print(f"Tipo '{type_hint}' no soportado.")
             value = input("Reingrese el valor en el formato correcto: ")
+
+    return parsed_data
 
 def create_document(database: dict) -> None:
     """
@@ -71,20 +76,19 @@ def create_document(database: dict) -> None:
         # Document is stored in the database with a unique ID
     """
 
-
     document_id = str(uuid.uuid4())
     document_data = {}
-    
-    while True:
-        field_name = input("Ingrese el nombre del campo (o 'exit()' para terminar): ")
-        if field_name.lower() == 'exit()':
-            break
+
+    field_name = input("Ingrese el nombre del campo (o 'exit()' para terminar): ")
+    while field_name.lower() != 'exit()':
         field_value = input(f"Ingrese el valor para el campo '{field_name}': ")
         parsed_value = parse_value(field_value)
         document_data[field_name] = parsed_value
 
+        field_name = input("Ingrese el nombre del campo (o 'exit()' para terminar): ")
+
     database[tuple(document_id)] = document_data
-    
+
     print(f"\nDocumento creado con ID: {document_id}")
     print(f"Datos del documento: {document_data}\n")
 
