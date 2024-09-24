@@ -1,4 +1,3 @@
-from locale import dcgettext
 import uuid
 
 directory = {}
