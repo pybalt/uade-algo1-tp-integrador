@@ -12,6 +12,50 @@ def create_database(name: str, directory):
     """
     directory[name] = {}
 
+def parse_value(value: str):
+    """
+    Parse the input value based on its format and return the appropriate Python type with a type tag.
+    Args:
+        value (str): The input string to parse in the format type.value1,value2,etc.
+    Returns:
+        dict: A dictionary with the parsed value and its associated type.
+    """
+    while True:
+        if '.' not in value:
+            print("Formato inválido. El valor debe estar en el formato 'tipo.valor1,valor2,...'")
+            value = input("Reingrese el valor en el formato correcto: ")
+            continue
+        
+        type_hint, raw_value = value.split('.', 1)
+
+        if type_hint == "string":
+            return {"_type": "string", "value": raw_value}
+        elif type_hint == "int":
+            return {"_type": "int", "value": int(raw_value)}
+        elif type_hint == "float":
+            return {"_type": "float", "value": float(raw_value)}
+        elif type_hint == "tuple":
+            values = raw_value.split(',')
+            cleaned_values = []
+            for v in values:
+                cleaned_values.append(v.strip())
+            return {"_type": "tuple", "value": tuple(cleaned_values)}
+        elif type_hint == "list":
+            values = raw_value.split(',')
+            cleaned_values = []
+            for v in values:
+                cleaned_values.append(v.strip())
+            return {"_type": "list", "value": cleaned_values}
+        elif type_hint == "set":
+            values = raw_value.split(',')
+            cleaned_values = set()
+            for v in values:
+                cleaned_values.add(v.strip())
+            return {"_type": "set", "value": cleaned_values}
+        else:
+            print(f"Tipo '{type_hint}' no soportado.")
+            value = input("Reingrese el valor en el formato correcto: ")
+
 def create_document(database: dict) -> None:
     """
     Creates a new document with user-provided fields and values, and stores it in the given database.
@@ -36,8 +80,8 @@ def create_document(database: dict) -> None:
         if field_name.lower() == 'exit()':
             break
         field_value = input(f"Ingrese el valor para el campo '{field_name}': ")
-        
-        document_data[field_name] = field_value
+        parsed_value = parse_value(field_value)
+        document_data[field_name] = parsed_value
 
     database[tuple(document_id)] = document_data
     
