@@ -14,15 +14,19 @@ def create_database(name: str, directory):
 
 def create_document(database: dict) -> None:
     """
-    Crea un nuevo documento en la base de datos con un ID único y almacena los campos
-    como tuplas.
-
-    Parameters:
-    - database (dict): La base de datos en la que se almacenará el documento.
-    
-    Returns:
-    None
+    Creates a new document with user-provided fields and values, and stores it in the given database.
+    Args:
+        database (dict): The database where the new document will be stored. The database is expected to be a dictionary.
+    The function generates a unique document ID using UUID, prompts the user to input field names and values,
+    and stores the document in the database with the generated ID as the key. The user can exit the input loop
+    by typing 'exit()' as the field name.
+    Example:
+        database = {}
+        create_document(database)
+        # User inputs field names and values
+        # Document is stored in the database with a unique ID
     """
+
 
     document_id = str(uuid.uuid4())
     document_data = {}
@@ -35,13 +39,12 @@ def create_document(database: dict) -> None:
         
         document_data[field_name] = field_value
 
-    # Almacenar el documento en la base de datos
     database[tuple(document_id)] = document_data
     
     print(f"\nDocumento creado con ID: {document_id}")
     print(f"Datos del documento: {document_data}\n")
 
-def list_databases(directory) -> None:
+def list_databases(directory: dict) -> None:
     """
     Prints the names of the databases in the given directory.
 
@@ -55,7 +58,7 @@ def list_databases(directory) -> None:
         print(key+1, db)
 
 
-def access_database(directory):
+def access_database(directory: dict):
     """
     Accesses a database in the given directory.
 
@@ -115,20 +118,37 @@ def list_database_choices() -> None:
     for key, value in explanations:
         print(f"\t{key}: {value}")
 
-def list_documents(database):
-    cant=int(input("De a cuantos documentos desea ver: "))
-    #for index, document in enumerate(database):
-        #print(index+1, database[document])
-    total_docs=len(database)
+def list_documents(database: dict) -> None:
+    """
+    Lists documents from the provided database in chunks specified by the user.
+    Args:
+        database (dict): A dictionary where keys are document identifiers and values are document contents.
+    The function prompts the user to input the number of documents they wish to view at a time.
+    It then displays the documents in chunks, allowing the user to decide whether to continue viewing more documents.
+    User Inputs:
+        - Number of documents to view at a time.
+        - Whether to continue viewing more documents after each chunk.
+    Example:
+        database = {
+            'doc1': 'Content of document 1',
+            'doc2': 'Content of document 2',
+            'doc3': 'Content of document 3',
+            ...
+        }
+        list_documents(database)
+    """
+    qty = int(input("De a cuantos documentos desea ver: "))
+    limit = len(database)
 
-    for i in range(0, total_docs, cant):
-        print(f"Mostrando documentos {i+1} a {min(i + cant, total_docs)}:")
+    for i in range(0, limit, qty):
+        print(f"Mostrando documentos {i+1} a {min(i + qty, limit)}:")
 
-        for index, key in enumerate(list(database.keys())[i:i + cant], start=i + 1):
+        for index, key in enumerate(list(database.keys())[i:i + qty], start=i + 1):
             print(f"{index}. {database[key]}")
 
-        continuar = input("Deseas ver más documentos? (s/n): ")
-        if continuar.lower() != "s":
+        user_input = input("Deseas ver más documentos? (s/n): ")
+        user_want_to_terminate = user_input.lower() != "s"
+        if user_want_to_terminate:
             break
 
 
@@ -186,19 +206,24 @@ def handle_options() -> str:
 
     return user_input
 
-def filtrar_por_id(documentos):
-    # Solicitar al usuario que ingrese el ID
-    id_usuario = input("Introducir el id del documento: ")
+def filter_documents_by_id(document_collection: dict) -> None:
+    """
+    Filtra una lista de documentos por su ID y muestra el documento filtrado.
+    Args:
+        documentos (list): Lista de diccionarios, donde cada diccionario representa un documento
+                           con las claves "id" y "contenido".
+    Returns:
+        None: Esta función no retorna ningún valor. Imprime el documento filtrado o un mensaje
+              indicando que no se encontró ningún documento con el ID proporcionado.
+    """
 
-    # Filtrar el documento que coincide con el ID introducido
-    resultado = [doc for doc in documentos if doc["id"] == id_usuario]
+    id = input("Introducir el id del documento: ")
+    filtered_documents = [doc for doc in document_collection if doc["id"] == id]
 
-    # Verificar si se encontró un documento o no
-    if resultado:
-        # Mostrar el documento encontrado, con el ID como tupla
-        print({"id": resultado[0]["id"], "contenido": resultado[0]["contenido"]})
+    if filtered_documents:
+        print({"id": filtered_documents[0]["id"], "contenido": filtered_documents[0]["contenido"]})
     else:
-        print(f"No se encontró ningún documento con el ID: {id_usuario}")
+        print(f"No se encontró ningún documento con el ID: {id}")
 
 
 
