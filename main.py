@@ -321,12 +321,11 @@ def filter_documents_by_id(database: dict) -> None:
     an appropriate message.
     """
 
-    id = input("Introducir el id del documento: ")
-    filtered_document = [doc_id for doc_id in database if doc_id == tuple(id)]
+    id = tuple(input("Introducir el id del documento: "))
 
-    if filtered_document:
-        doc = filtered_document[0]
-        print(f"{doc}: \t{database[doc]}")
+    if id in database:
+        doc = database[id]
+        print(f"{''.join(id)}:\t{doc}")
     else:
         print(f"No se encontró ningún documento con el ID: {id}")
 
