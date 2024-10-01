@@ -228,19 +228,25 @@ def list_documents(database: dict) -> None:
         }
         list_documents(database)
     """
-    qty = int(input("De a cuantos documentos desea ver: "))
     limit = len(database)
+    if limit == 0:
+        print("No hay documentos en la base de datos.")
+        return
+    qty = int(input("De a cuantos documentos desea ver: "))
 
     for i in range(0, limit, qty):
         print(f"Mostrando documentos {i+1} a {min(i + qty, limit)}:")
 
         for index, key in enumerate(list(database.keys())[i:i + qty], start=i + 1):
-            print(f"{index}. {database[key]}")
+            print(f"{index}. \"{''.join(key)}\": {database[key]}")
 
-        user_input = input("Deseas ver más documentos? (s/n): ")
-        user_want_to_terminate = user_input.lower() != "s"
-        if user_want_to_terminate:
-            break
+        if i + qty < limit:
+            user_input = input("Deseas ver más documentos? (s/n): ")
+            user_want_to_terminate = user_input.lower() != "s"
+            if user_want_to_terminate:
+                break
+        else:
+            print("No hay más documentos para mostrar.")
 
 
 def handle_database_operations(database: dict) -> None:
