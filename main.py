@@ -108,6 +108,16 @@ def create_document(database: dict) -> None:
     print(f"\nDocumento creado con ID: {document_id}")
     print(f"Datos del documento: {document_data}\n")
 
+def edit_document(database: dict) -> None:
+    id = tuple(input("Introducir el id del documento: "))
+    if id in database:
+        print(''.join(id), database[id])
+        field_name = input("Introducir el nombre del campo a editar: ")
+        field_value = input("Introducir el valor del campo: ")
+        parsed_value = parse_value(field_value)
+        database[id][field_name] = parsed_value
+    else:
+        print(f"No se encontró ningún documento con el ID: {id}")
 
 def delete_document(database: dict) -> None:
     """
@@ -202,6 +212,7 @@ def list_database_choices() -> None:
         ("2", "Listar documentos"),
         ("3", "Eliminar documento"),
         ("4", "Filtrar documentos por ID"),
+        ("5", "Editar documento"),
         ("exit()", "Volver al menú principal"),
     ]
 
@@ -265,6 +276,8 @@ def handle_database_operations(database: dict) -> None:
             delete_document(database)
         elif option == "4":
             filter_documents_by_id(database)
+        elif option == "5":
+            edit_document(database)
 
         list_database_choices()
         option = input("Seleccione una opción:\n\t--> ")
