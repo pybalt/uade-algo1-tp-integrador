@@ -239,19 +239,25 @@ def list_documents(database: dict) -> None:
         }
         list_documents(database)
     """
-    qty = int(input("De a cuantos documentos desea ver: "))
     limit = len(database)
+    if limit == 0:
+        print("No hay documentos en la base de datos.")
+        return
+    qty = int(input("De a cuantos documentos desea ver: "))
 
     for i in range(0, limit, qty):
         print(f"Mostrando documentos {i+1} a {min(i + qty, limit)}:")
 
         for index, key in enumerate(list(database.keys())[i:i + qty], start=i + 1):
-            print(f"{index}. {database[key]}")
+            print(f"{index}. \"{''.join(key)}\": {database[key]}")
 
-        user_input = input("Deseas ver más documentos? (s/n): ")
-        user_want_to_terminate = user_input.lower() != "s"
-        if user_want_to_terminate:
-            break
+        if i + qty < limit:
+            user_input = input("Deseas ver más documentos? (s/n): ")
+            user_want_to_terminate = user_input.lower() != "s"
+            if user_want_to_terminate:
+                break
+        else:
+            print("No hay más documentos para mostrar.")
 
 
 def handle_database_operations(database: dict) -> None:
@@ -328,12 +334,11 @@ def filter_documents_by_id(database: dict) -> None:
     an appropriate message.
     """
 
-    id = input("Introducir el id del documento: ")
-    filtered_document = [doc_id for doc_id in database if doc_id == tuple(id)]
+    id = tuple(input("Introducir el id del documento: "))
 
-    if filtered_document:
-        doc = filtered_document[0]
-        print(f"{doc}: \t{database[doc]}")
+    if id in database:
+        doc = database[id]
+        print(f"{''.join(id)}:\t{doc}")
     else:
         print(f"No se encontró ningún documento con el ID: {id}")
 
