@@ -1,5 +1,4 @@
 import app
-import uuid
 
 
 if __name__ == "__main__":
