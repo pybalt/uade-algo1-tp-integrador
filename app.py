@@ -1,6 +1,4 @@
-from typing import Callable
 import database
-import console
 
 
 def start():
