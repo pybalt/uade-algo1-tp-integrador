@@ -19,37 +19,43 @@ def parse_value(value: str):
 
         type_hint, raw_value = value.split(".", 1)
 
-        if type_hint == "string":
-            parsed_data = {"_type": "string", "value": raw_value}
-            parsed_correctly = True
-        elif type_hint == "int":
-            parsed_data = {"_type": "int", "value": int(raw_value)}
-            parsed_correctly = True
-        elif type_hint == "float":
-            parsed_data = {"_type": "float", "value": float(raw_value)}
-            parsed_correctly = True
-        elif type_hint == "tuple":
-            values = raw_value.split(",")
-            cleaned_values = [v.strip() for v in values]
-            parsed_data = {"_type": "tuple", "value": tuple(cleaned_values)}
-            parsed_correctly = True
-        elif type_hint == "list":
-            values = raw_value.split(",")
-            cleaned_values = [v.strip() for v in values]
-            parsed_data = {"_type": "list", "value": cleaned_values}
-            parsed_correctly = True
-        elif type_hint == "set":
-            values = raw_value.split(",")
-            cleaned_values = {v.strip() for v in values}
-            parsed_data = {"_type": "set", "value": cleaned_values}
-            parsed_correctly = True
-        elif type_hint == "matrix":
-            rows = raw_value.split(";")
-            matrix = [row.split(",") for row in rows]
-            parsed_data = {"_type": "matrix", "value": matrix}
-            parsed_correctly = True
-        else:
-            print(f"Tipo '{type_hint}' no soportado.")
-            value = input("Reingrese el valor en el formato correcto: ")
+        try:
 
+            if type_hint == "string":
+                parsed_data = {"_type": "string", "value": raw_value}
+                parsed_correctly = True
+            elif type_hint == "int":
+                parsed_data = {"_type": "int", "value": int(raw_value)}
+                parsed_correctly = True
+            elif type_hint == "float":
+                parsed_data = {"_type": "float", "value": float(raw_value)}
+                parsed_correctly = True
+            elif type_hint == "tuple":
+                values = raw_value.split(",")
+                cleaned_values = [v.strip() for v in values]
+                parsed_data = {"_type": "tuple", "value": tuple(cleaned_values)}
+                parsed_correctly = True
+            elif type_hint == "list":
+                values = raw_value.split(",")
+                cleaned_values = [v.strip() for v in values]
+                parsed_data = {"_type": "list", "value": cleaned_values}
+                parsed_correctly = True
+            elif type_hint == "set":
+                values = raw_value.split(",")
+                cleaned_values = {v.strip() for v in values}
+                parsed_data = {"_type": "set", "value": cleaned_values}
+                parsed_correctly = True
+            elif type_hint == "matrix":
+                rows = raw_value.split(";")
+                matrix = [row.split(",") for row in rows]
+                parsed_data = {"_type": "matrix", "value": matrix}
+                parsed_correctly = True
+            else:
+                print(f"Tipo '{type_hint}' no soportado.")
+                value = input("Reingrese el valor en el formato correcto: ")
+
+        except ValueError as e:
+            print(f"No se pudo convertir '{raw_value}' al tipo '{type_hint}'. Asegúrese de que el valor es correcto.")
+            value = input("Reingrese el valor en el formato correcto: ")
+            
     return parsed_data
