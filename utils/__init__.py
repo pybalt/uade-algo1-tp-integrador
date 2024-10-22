@@ -29,23 +29,23 @@ def parse_value(value: str):
             parsed_data = {"_type": "float", "value": float(raw_value)}
             parsed_correctly = True
         elif type_hint == "tuple":
-            values = raw_value.split(",")
-            cleaned_values = [v.strip() for v in values]
+            values: list = raw_value.split(",")
+            cleaned_values = list(map(lambda v: v.strip(), values))
             parsed_data = {"_type": "tuple", "value": tuple(cleaned_values)}
             parsed_correctly = True
         elif type_hint == "list":
             values = raw_value.split(",")
-            cleaned_values = [v.strip() for v in values]
+            cleaned_values = list(map(lambda v: v.strip(), values))
             parsed_data = {"_type": "list", "value": cleaned_values}
             parsed_correctly = True
         elif type_hint == "set":
             values = raw_value.split(",")
-            cleaned_values = {v.strip() for v in values}
+            cleaned_values = set(map(lambda v: v.strip().lower(), values))
             parsed_data = {"_type": "set", "value": cleaned_values}
             parsed_correctly = True
         elif type_hint == "matrix":
             rows = raw_value.split(";")
-            matrix = [row.split(",") for row in rows]
+            matrix = list(map(lambda row: row.split(","), rows))
             parsed_data = {"_type": "matrix", "value": matrix}
             parsed_correctly = True
         else:

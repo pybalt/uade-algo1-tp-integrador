@@ -1,5 +1,29 @@
 import uuid
+import re
 from utils import parse_value
+
+
+
+def buscar_por_expresion_regular(database: dict) -> None:
+    """
+    Busca documentos en la base de datos que contengan un valor que coincida con la expresión regular.
+    Args:
+        database (dict): La base de datos donde buscar documentos.
+    """
+    regex_pattern = input("Ingrese la expresión regular a buscar: ")
+    regex = re.compile(regex_pattern)
+    coincidencias = False 
+
+    for doc_id, documento in database.items():
+        for key, value in documento.items():
+                if regex.search(str(value)) or regex.search(str(key)):
+                    print(f"Documento encontrado con ID: {str(doc_id)}")
+                    print(f"Datos del documento: {documento}\n")
+                    coincidencias = True
+                    break
+
+    if not coincidencias:
+        print("No se encontraron coincidencias con el patrón ingresado.")
 
 
 def create(database: dict) -> None:
