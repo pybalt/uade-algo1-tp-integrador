@@ -41,16 +41,33 @@ def list_documents(database: dict) -> None:
     if limit == 0:
         print("No hay documentos en la base de datos.")
         return
-    qty = int(input("De a cuantos documentos desea ver: "))
+    
+     while True:
+        qty_input = input("De a cuántos documentos desea ver: ")
+        
+        
+        if not qty_input.strip(): 
+            print("Error: La entrada no puede estar vacía. Por favor, ingresa un número válido.")
+            continue
+
+        try:
+            qty = int(qty_input)
+            if qty <= 0:  
+                print("Error: Debes ingresar un número positivo.")
+                continue
+            break 
+
+        except ValueError:
+            print("Error: Por favor, ingresa un número válido.")
 
     for i in range(0, limit, qty):
-        print(f"Mostrando documentos {i+1} a {min(i + qty, limit)}:")
+        print(f"Mostrando documentos {i + 1} a {min(i + qty, limit)}:")
 
-        for index, key in enumerate(list(database.keys())[i : i + qty], start=i + 1):
-            print(f"{index}. \"{''.join(key)}\": {database[key]}")
+        for index, key in enumerate(list(database.keys())[i: i + qty], start=i + 1):
+            print(f"{index}. \"{key}\": {database[key]}")
 
         if i + qty < limit:
-            user_input = input("Deseas ver más documentos? (s/n): ")
+            user_input = input("¿Deseas ver más documentos? (s/n): ")
             user_want_to_terminate = user_input.lower() != "s"
             if user_want_to_terminate:
                 break
