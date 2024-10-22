@@ -21,11 +21,13 @@ def handler(database: dict) -> None:
         elif option == "2":
             console.documents.list_documents(database)
         elif option == "3":
-            delete_document(database)
+            delete(database)
         elif option == "4":
             filter_by_id(database)
         elif option == "5":
             edit(database)
+        elif option == "6":
+            buscar_por_expresion_regular(database)
 
         console.documents.show_menu()
         option = input("Seleccione una opción:\n\t--> ")

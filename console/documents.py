@@ -11,6 +11,7 @@ def show_menu() -> None:
         ("3", "Eliminar documento"),
         ("4", "Filtrar documentos por ID"),
         ("5", "Editar documento"),
+        ("6",  "Buscar documento por patron"),
         ("exit()", "Volver al menú principal"),
     ]
 
