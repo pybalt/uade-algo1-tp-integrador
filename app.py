@@ -1,6 +1,5 @@
 import database
 
-
 def start():
     user_input = input("")
     directory = database.get_directory()
