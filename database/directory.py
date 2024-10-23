@@ -1,9 +1,9 @@
 _directory = {}
 
-
 def fill_directory():
-    pass
-
+    import json_handling
+    global _directory
+    _directory = json_handling.load_from_json()  # Cargar la base de datos desde JSON
 
 def get_directory():
-    return _directory
+    return _directory 
