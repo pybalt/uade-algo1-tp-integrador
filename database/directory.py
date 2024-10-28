@@ -1,9 +1,17 @@
-_directory = {}
+from utils.json_handling import load_from_json
 
-def fill_directory():
-    import json_handling
-    global _directory
-    _directory = json_handling.load_from_json()  # Cargar la base de datos desde JSON
+def initialize_directory():
+    """
+    Inicializa el directorio cargándolo desde un archivo JSON.
+    """
+    directory = load_from_json()  
+    return directory
 
-def get_directory():
-    return _directory 
+def get_directory(directory):
+    """
+    Devuelve el contenido actual del directorio.
+    
+    Args:
+        directory (dict): El directorio a devolver.
+    """
+    return directory
