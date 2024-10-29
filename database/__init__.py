@@ -22,15 +22,20 @@ def handler(directory) -> str:
     """
     console.databases.show_menu()
     user_input = input("Seleccione una opcion\n\t--> ").lower()
-
     if user_input == "a":
         console.databases.list_databases(directory)
     elif user_input == "b":
-        database = access(directory)
-        documents.handler(database)
+        try:
+            database = access(directory)
+            documents.handler(database)
+        except KeyError:
+            print(f'La base de datos no existe.')
     elif user_input == "c":
         name = input("Ingrese el nombre de la base de datos: ")
-        create(name, directory)
+        try:
+            create(name, directory)
+        except KeyError:
+            print(f'La base de datos {name} no existe.')
     elif user_input == "exit()":
         console.exit()
 
