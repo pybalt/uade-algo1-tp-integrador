@@ -24,9 +24,5 @@ def access(directory: dict):
 
     """
     database_name = input("Ingrese nombre de base de datos.\n\t--> ")
-    try:
-        print(f"Accediendo a la base de datos {database_name}")
-        return directory[database_name]
-    except KeyError:
-        print(f"La base de datos llamada {database_name} no existe")
-        return None
+    print(f"Accediendo a la base de datos {database_name}")
+    return directory[database_name]
