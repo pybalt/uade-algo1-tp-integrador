@@ -6,7 +6,7 @@ def mostrar_documentos_unicos(database: dict) -> None:
     unique_documents = set()
 
     for doc_id, doc_data in database.items():
-        doc_str = str(sorted(doc_data.items()))
+        doc_str = str(doc_data)
         unique_documents.add(doc_str)
 
     print("Documentos únicos en la base de datos:")
