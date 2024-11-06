@@ -2,7 +2,19 @@ import uuid
 import re
 from utils import parse_value
 
+def mostrar_documentos_unicos(database: dict) -> None:
+    unique_documents = set()
 
+    for doc_id, doc_data in database.items():
+        doc_str = str(doc_data)
+        unique_documents.add(doc_str)
+
+    print("Documentos únicos en la base de datos:")
+    for unique_doc in unique_documents:
+        print(unique_doc)
+
+     
+            
 
 def buscar_por_expresion_regular(database: dict) -> None:
     """
