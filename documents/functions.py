@@ -53,7 +53,7 @@ def create(database: dict) -> None:
         # Document is stored in the database with a unique ID
     """
 
-    document_id = str(uuid.uuid4())
+    document_id = uuid.uuid4()
     document_data = {}
 
     print("Creando un nuevo documento...")
@@ -76,23 +76,22 @@ def create(database: dict) -> None:
 
         field_name = input("Ingrese el nombre del campo (o 'exit()' para terminar): ")
 
-    database[tuple(document_id)] = document_data
+    database[document_id] = document_data
 
     print(f"\nDocumento creado con ID: {document_id}")
     print(f"Datos del documento: {document_data}\n")
 
 
 def edit(database: dict) -> None:
-    id = tuple(input("Introducir el id del documento: "))
+    id = uuid.UUID(input("Introducir el id del documento: "))
     if id in database:
-        print("".join(id), database[id])
+        print(id, database[id])
         field_name = input("Introducir el nombre del campo a editar: ")
         field_value = input("Introducir el valor del campo: ")
         parsed_value = parse_value(field_value)
         database[id][field_name] = parsed_value
     else:
         print(f"No se encontró ningún documento con el ID: {id}")
-
 
 def delete(database: dict) -> None:
     """
@@ -108,7 +107,7 @@ def delete(database: dict) -> None:
     Prompts the user to input the ID of the document to delete. If the document ID exists in the database,
     it deletes the document and prints a success message. If the document ID does not exist, it prints an error message.
     """
-    document_id = tuple(input("Ingrese el ID del documento a eliminar: "))
+    document_id = uuid.UUID(input("Ingrese el ID del documento a eliminar: "))
     if document_id in database:
         del database[document_id]
         print(f"Documento con ID: {document_id} eliminado exitosamente.")
@@ -128,10 +127,10 @@ def filter_by_id(database: dict) -> None:
     an appropriate message.
     """
 
-    id = tuple(input("Introducir el id del documento: "))
+    id = uuid.UUID(input("Introducir el id del documento: "))
 
     if id in database:
         doc = database[id]
-        print(f"{''.join(id)}:\t{doc}")
+        print(id, doc)
     else:
         print(f"No se encontró ningún documento con el ID: {id}")
