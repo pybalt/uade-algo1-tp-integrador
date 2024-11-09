@@ -19,8 +19,8 @@ def parse_value(value: str):
 
         type_hint, raw_value = value.split(".", 1)
 
-        if type_hint == "string":
-            parsed_data = {"_type": "string", "value": raw_value}
+        if type_hint == "str":
+            parsed_data = {"_type": "str", "value": raw_value}
             parsed_correctly = True
         elif type_hint == "int":
             parsed_data = {"_type": "int", "value": int(raw_value)}

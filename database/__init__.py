@@ -22,6 +22,22 @@ def handler(directory) -> str:
             create(name, directory)
         except KeyError:
             print(f'La base de datos {name} no existe.')
+    elif user_input == "d":
+        database1 = access(directory)
+        database2 = access(directory)
+        console.databases.show_set_operation(union(database1, database2))
+    elif user_input == "e":
+        database1 = access(directory)
+        database2 = access(directory)
+        console.databases.show_set_operation(intersection(database1, database2))
+    elif user_input == "f":
+        database1 = access(directory)
+        database2 = access(directory)
+        console.databases.show_set_operation(difference(database1, database2))
+    elif user_input == "g":
+        database1 = access(directory)
+        database2 = access(directory)
+        console.databases.show_set_operation(symmetric_difference(database1, database2))
     elif user_input == "exit()":
         update_dictory()
         console.exit()

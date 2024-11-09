@@ -9,6 +9,12 @@ def create(name: str, directory):
     Parameters:
     - name (str): The name of the database.
     - directory: The directory where the database will be stored.
+
+    Returns:
+    None
+
+    Example:
+    >>> create("mi_base_datos", directory)
     """
     if name in directory:
         print(f"La base de datos {name} ya existe.")
@@ -18,6 +24,45 @@ def create(name: str, directory):
         json.dump({}, f, indent=4)
     print(f"Base de datos {name} creada exitosamente.")
 
+def str_to_uuid(data: dict):
+    new_dict = {}
+    for key, value in data.items():
+        if isinstance(key, str) and key.startswith("UUID("):
+            new_key = uuid.UUID(key[5:-1])
+            new_dict[new_key] = value
+        else:
+            new_dict[key] = value
+    return new_dict
+
+def uuid_to_str(data: dict):
+    new_dict = {}
+    for key, value in data.items():
+        if isinstance(key, uuid.UUID):
+            new_key = f"UUID({key})"
+            new_dict[new_key] = value
+        else:
+            new_dict[key] = value
+    return new_dict
+
+def save(content: dict, database_name: str, directory: dict):
+    file_path = directory[database_name]
+    content = uuid_to_str(content)
+    with open(file_path, 'w') as f:
+        json.dump(content, f, indent=4)
+    print(f"Base de datos {database_name} guardada exitosamente.")
+
+def delete(database_name: str, directory: dict):
+    if database_name not in directory:
+        print(f"La base de datos {database_name} no existe.")
+        return
+    file_path = directory[database_name]
+    try:
+        os.remove(file_path)
+        del directory[database_name]
+        save(directory)
+        print(f"Base de datos {database_name} eliminada exitosamente.")
+    except Exception as e:
+        print(f"Error al eliminar la base de datos {database_name}: {e}")
 
 def access(directory: dict):
     """
@@ -52,42 +97,37 @@ def access(directory: dict):
     return database, database_name
 
 
-def save(content: dict, database_name: str, directory: dict):
-    file_path = directory[database_name]
-    content = uuid_to_str(content)
-    with open(file_path, 'w') as f:
-        json.dump(content, f, indent=4)
-    print(f"Base de datos {database_name} guardada exitosamente.")
+def hashable_value(value):
+    if isinstance(value, dict):
+        return frozenset((k, hashable_value(v)) for k, v in value.items())
+    elif isinstance(value, list):
+        return tuple(hashable_value(v) for v in value)
+    return value
 
-def delete(database_name: str, directory: dict):
-    if database_name not in directory:
-        print(f"La base de datos {database_name} no existe.")
-        return
-    file_path = directory[database_name]
-    try:
-        os.remove(file_path)
-        del directory[database_name]
-        save(directory)
-        print(f"Base de datos {database_name} eliminada exitosamente.")
-    except Exception as e:
-        print(f"Error al eliminar la base de datos {database_name}: {e}")
+def frozenset_to_readable(fset):
+    def unpack(value):
+        if isinstance(value, frozenset):
+            return {k: unpack(v) for k, v in value}
+        elif isinstance(value, list):
+            return [unpack(v) for v in value]
+        return value
 
-def str_to_uuid(data: dict):
-    new_dict = {}
-    for key, value in data.items():
-        if isinstance(key, str) and key.startswith("UUID("):
-            new_key = uuid.UUID(key[5:-1])
-            new_dict[new_key] = value
-        else:
-            new_dict[key] = value
-    return new_dict
+    return {k: unpack(v) for k, v in fset}
 
-def uuid_to_str(data: dict):
-    new_dict = {}
-    for key, value in data.items():
-        if isinstance(key, uuid.UUID):
-            new_key = f"UUID({key})"
-            new_dict[new_key] = value
-        else:
-            new_dict[key] = value
-    return new_dict
+
+def union(database1: dict, database2: dict):
+    result = set(hashable_value(v) for v in database1.values()) | set(hashable_value(v) for v in database2.values())
+    return [frozenset_to_readable(f) for f in result]
+
+def intersection(database1: dict, database2: dict):
+    result = set(hashable_value(v) for v in database1.values()) & set(hashable_value(v) for v in database2.values())
+    return [frozenset_to_readable(f) for f in result]
+
+def difference(database1: dict, database2: dict):
+    result = set(hashable_value(v) for v in database1.values()) - set(hashable_value(v) for v in database2.values())
+    return [frozenset_to_readable(f) for f in result]
+
+def symmetric_difference(database1: dict, database2: dict):
+    result = set(hashable_value(v) for v in database1.values()) ^ set(hashable_value(v) for v in database2.values())
+    return [frozenset_to_readable(f) for f in result]
+
