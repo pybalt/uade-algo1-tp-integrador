@@ -1,14 +1,13 @@
-import database
-
+from database import *
 
 def start():
     user_input = input("")
-    directory = database.get_directory()
+    directory = get_directory()
+    fill(directory)
     while user_input != "exit()":
-
         if not directory:
             print("No se han creado bases de datos.")
             database_name = input("Ingrese nombre de base de datos.\n\t--> ")
-            database.create(database_name, directory)
+            create(database_name, directory)
 
-        user_input = database.handler(directory)
+        user_input = handler(directory)

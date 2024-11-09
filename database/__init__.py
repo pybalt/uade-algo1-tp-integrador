@@ -5,29 +5,15 @@ import documents
 
 
 def handler(directory) -> str:
-    """
-    Handles the user's options and returns the selected option.
-    Parameters:
-    - choices (dict): A dictionary containing the available choices and their corresponding functions.
-    Returns:
-    - str: The selected option.
-    Example:
-    >>> handle_options({'a': function_a, 'b': function_b})
-        a: Explanation A
-        b: Explanation B
-        Select an option
-            --> a
-        ---
-        function_a() will be executed.
-    """
     console.databases.show_menu()
     user_input = input("Seleccione una opcion\n\t--> ").lower()
     if user_input == "a":
         console.databases.list_databases(directory)
     elif user_input == "b":
         try:
-            database = access(directory)
+            database, database_name = access(directory)
             documents.handler(database)
+            save(database, database_name, directory)
         except KeyError:
             print(f'La base de datos no existe.')
     elif user_input == "c":
@@ -53,6 +39,7 @@ def handler(directory) -> str:
         database2 = access(directory)
         console.databases.show_set_operation(symmetric_difference(database1, database2))
     elif user_input == "exit()":
+        update_dictory()
         console.exit()
 
     return user_input

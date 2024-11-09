@@ -50,7 +50,7 @@ def show_menu() -> None:
 
     for key, value in explanations:
 
-        print(f"\t{key}: {value}")
+
 def show_set_operation(dataset: dict) -> None:
     """
     Prints the result of the set operation.

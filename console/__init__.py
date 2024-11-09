@@ -1,2 +1,2 @@
-def exit():
-    print("Saliendo del programa...")
+def exit() -> None:
+    print("Saliendo del programa...") 
