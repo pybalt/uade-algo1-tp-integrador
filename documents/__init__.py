@@ -12,13 +12,11 @@ def handler(database: dict) -> None:
     Returns:
     None
     """
-    # TODO: Reformat this function to use the console module. documents.__init__.handler
-    # TODO: Reformat try-except blocks to use console.error and console.log. documents.__init__.handler
 
     console.documents.show_menu()
     option = input("Seleccione una opción:\n\t--> ")
-    try:
-        while option != "exit()":
+    while option != "exit()":
+        try:
             if option == "1":
                 console.log("Creando un nuevo documento...\n"
                             +"Los tipos de datos soportados son: string, int, float, tuple, list, set, matrix\n"
@@ -32,12 +30,10 @@ def handler(database: dict) -> None:
                 console.documents.list_documents(database)
             elif option == "3":
                 delete(database)
+                console.log(f"Documento con ID: {document_id} eliminado exitosamente.")
             elif option == "4":
-                try:
-                    id, doc = filter_by_id(database)
-                    console.log(f"Documento encontrado: {doc}")
-                except KeyError:
-                    console.error(f"No se encontró ningún documento con el ID: {id}")
+                id, doc = filter_by_id(database)
+                console.log(f"Documento encontrado: {doc}")
             elif option == "5":
                 if edit(database):
                     console.log(f"Documento actualizado: {doc}")
@@ -57,5 +53,7 @@ def handler(database: dict) -> None:
 
             console.documents.show_menu()
             option = input("Seleccione una opción:\n\t--> ")
-    except AssertionError as e:
-        console.error(e)
+        except AssertionError as e:
+            console.error(e)
+        except KeyError as e:
+            console.error(e)

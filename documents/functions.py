@@ -113,9 +113,8 @@ def delete(database: dict) -> None:
     document_id = uuid.UUID(input("Ingrese el ID del documento a eliminar: "))
     if document_id in database:
         del database[document_id]
-        print(f"Documento con ID: {document_id} eliminado exitosamente.")
     else:
-        print(f"No se encontró ningún documento con el ID: {document_id}")
+        raise KeyError(f"No se encontró ningún documento con el ID: {document_id}")
 
 
 def filter_by_id(database: dict) -> tuple:
@@ -131,5 +130,7 @@ def filter_by_id(database: dict) -> tuple:
     """
 
     id = uuid.UUID(input("Introducir el id del documento: "))
-
-    return id, database[id]
+    if id in database:
+        return id, database[id]
+    else:
+        raise KeyError(f"No se encontró ningún documento con el ID: {id}")
