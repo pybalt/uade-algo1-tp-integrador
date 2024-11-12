@@ -1,23 +1,25 @@
-name: "Crear Issues desde TODOs"
-
-on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch:
-
+name: "Run TODO to Issue"
+on: [ "push" ]
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v3
-
-      - name: "Buscar TODOs"
-        id: todo
-        uses: "alstr/todo-to-issue-action@v4"
+      - uses: "actions/checkout@v4"
+      - name: "TODO to Issue"
+        uses: "alstr/todo-to-issue-action@v5"
         with:
-          AUTO_ASSIGN: true
-          IDENTIFIERS: '["TODO", "FIXME"]'
-          COLLECTIONS_HEADER: "## Colección de TODOs encontrados:"
-          LABEL: "tarea-pendiente"
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INSERT_ISSUE_URLS: "true"
+          CLOSE_ISSUES: "true"
+      - name: Set Git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Commit and Push Changes
+        run: |
+          git add -A
+          if [[ `git status --porcelain` ]]; then
+            git commit -m "Automatically added GitHub issue links to TODOs"
+            git push origin main
+          else
+            echo "No changes to commit"
+          fi
