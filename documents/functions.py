@@ -1,6 +1,7 @@
 import uuid
 import re
 from utils import parse_value
+from collections.abc import Iterable
 
 def select_distinct(database: dict) -> list:
     unique_documents = set()
@@ -23,28 +24,34 @@ def select_distinct(database: dict) -> list:
     return result
 
 
-def search_by_regex(database: dict) -> bool:
+def search_by_regex(database: dict) -> Iterable[uuid.UUID]:
     """
     Search for documents in the database that contain a value matching the regular expression.
     Args:
         database (dict): The database where to search for documents.
     """
-    regex_pattern = input("Enter the regular expression to search for: ")
-    regex = re.compile(regex_pattern)
-    matches = False
+    regex = input("Introducir la expresión regular: ")
+    try:
+        pattern = re.compile(regex)
+    except re.error:
+        print("Expresión regular inválida")
+        raise ValueError("Expresión regular inválida")
 
-    found_matches = filter(
-        lambda x: any(regex.search(str(value)) or regex.search(str(key))
-                     for key, value in x[1].items()),
-        database.items()
-    )
-
-    for doc_id, document in list(found_matches):
-        print(f"Document found with ID: {str(doc_id)}")
-        print(f"Document data: {document}\n")
-        matches = True
-
-    return matches
+    def search_recursive(doc_data: dict) -> bool:
+        if isinstance(doc_data, dict):
+            for key, value in doc_data.items():
+                if pattern.search(str(key)) or search_recursive(value):
+                    return True
+        elif isinstance(doc_data, list):
+            for item in doc_data:
+                if search_recursive(item):
+                    return True
+        return pattern.search(str(doc_data))
+    result = {}
+    matches = filter(lambda x: search_recursive(database[x]), database.keys())
+    for match in matches:
+        result[match] = database[match]
+    return result
 
 def create(database: dict) -> uuid.UUID:
     """
