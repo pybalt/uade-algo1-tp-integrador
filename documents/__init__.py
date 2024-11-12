@@ -27,9 +27,9 @@ def handler(database: dict) -> None:
         elif option == "5":
             edit(database)
         elif option == "6":
-            buscar_por_expresion_regular(database)
+            search_by_regex(database)
         elif option == "7":
-            mostrar_documentos_unicos(database)
+            select_distinct(database)
 
         console.documents.show_menu()
         option = input("Seleccione una opción:\n\t--> ")

@@ -2,10 +2,10 @@ import uuid
 import re
 from utils import parse_value
 
-def mostrar_documentos_unicos(database: dict) -> None:
+def select_distinct(database: dict) -> None:
     unique_documents = set()
 
-    for doc_id, doc_data in database.items():
+    for _, doc_data in database.items():
         doc_str = str(doc_data)
         unique_documents.add(doc_str)
 
@@ -13,29 +13,30 @@ def mostrar_documentos_unicos(database: dict) -> None:
     for unique_doc in unique_documents:
         print(unique_doc)
 
-     
-            
 
-def buscar_por_expresion_regular(database: dict) -> None:
+def search_by_regex(database: dict) -> None:
     """
-    Busca documentos en la base de datos que contengan un valor que coincida con la expresión regular.
+    Search for documents in the database that contain a value matching the regular expression.
     Args:
-        database (dict): La base de datos donde buscar documentos.
+        database (dict): The database where to search for documents.
     """
-    regex_pattern = input("Ingrese la expresión regular a buscar: ")
+    regex_pattern = input("Enter the regular expression to search for: ")
     regex = re.compile(regex_pattern)
-    coincidencias = False 
+    matches = False
 
-    for doc_id, documento in database.items():
-        for key, value in documento.items():
-                if regex.search(str(value)) or regex.search(str(key)):
-                    print(f"Documento encontrado con ID: {str(doc_id)}")
-                    print(f"Datos del documento: {documento}\n")
-                    coincidencias = True
-                    break
+    found_matches = filter(
+        lambda x: any(regex.search(str(value)) or regex.search(str(key))
+                     for key, value in x[1].items()),
+        database.items()
+    )
 
-    if not coincidencias:
-        print("No se encontraron coincidencias con el patrón ingresado.")
+    for doc_id, document in found_matches:
+        print(f"Document found with ID: {str(doc_id)}")
+        print(f"Document data: {document}\n")
+        matches = True
+
+    if not matches:
+        print("No matches found for the entered pattern.")
 
 
 def create(database: dict) -> None:
