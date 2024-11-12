@@ -1,6 +1,5 @@
-import json
-import os
-import uuid
+import json, os, uuid
+from functools import reduce
 
 def create(name: str, directory):
     """
@@ -116,8 +115,9 @@ def frozenset_to_readable(fset):
 
 
 def union(database1: dict, database2: dict):
-    result = set(hashable_value(v) for v in database1.values()) | set(hashable_value(v) for v in database2.values())
-    return [frozenset_to_readable(f) for f in result]
+    result = reduce(lambda acc, v: acc | {hashable_value(v)}, database1.values(), set())
+    result |= reduce(lambda acc, v: acc | {hashable_value(v)}, database2.values(), set())
+    return result
 
 def intersection(database1: dict, database2: dict):
     result = set(hashable_value(v) for v in database1.values()) & set(hashable_value(v) for v in database2.values())
