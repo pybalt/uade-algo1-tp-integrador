@@ -1,0 +1,112 @@
+{
+    "UUID(0b2ee06f-8838-4d95-8ac8-3e57d212ad83)": {
+        "nombre": {
+            "_type": "str",
+            "value": "Perro"
+        },
+        "especie": {
+            "_type": "str",
+            "value": "Canino"
+        },
+        "habitat": {
+            "_type": "str",
+            "value": "Domestico"
+        },
+        "alimentacion": {
+            "_type": "str",
+            "value": "Omnivoro"
+        },
+        "esperanza_de_vida": {
+            "_type": "int",
+            "value": 13
+        }
+    },
+    "UUID(3ae0f7a9-8f42-4fdb-ba72-ee17fae8ff6d)": {
+        "nombre": {
+            "_type": "str",
+            "value": "Gato"
+        },
+        "especie": {
+            "_type": "str",
+            "value": "Felino"
+        },
+        "habitat": {
+            "_type": "str",
+            "value": "Domestico"
+        },
+        "alimentacion": {
+            "_type": "str",
+            "value": "Carnivoro"
+        },
+        "esperanza_de_vida": {
+            "_type": "int",
+            "value": 15
+        }
+    },
+    "UUID(74dfdac2-8cd9-4a07-9193-41ce53ae2e91)": {
+        "nombre": {
+            "_type": "str",
+            "value": "Elefante Africano"
+        },
+        "especie": {
+            "_type": "str",
+            "value": "Elefantido"
+        },
+        "habitat": {
+            "_type": "str",
+            "value": "Sabana y Bosques"
+        },
+        "alimentacion": {
+            "_type": "str",
+            "value": "Herbivoro"
+        },
+        "esperanza_de_vida": {
+            "_type": "int",
+            "value": 70
+        }
+    },
+    "UUID(1244b6d9-8d20-46d8-aba8-1f2424a354ee)": {
+        "nombre": {
+            "_type": "str",
+            "value": "Tigre de Bengala"
+        },
+        "especie": {
+            "_type": "str",
+            "value": "Felino"
+        },
+        "habitat": {
+            "_type": "str",
+            "value": "Bosques y Sabanas"
+        },
+        "alimentacion": {
+            "_type": "str",
+            "value": "Carnivoro"
+        },
+        "esperanza_de_vida": {
+            "_type": "int",
+            "value": 20
+        }
+    },
+    "UUID(aa64a91c-8c72-4525-bafc-85b00bcbad15)": {
+        "nombre": {
+            "_type": "str",
+            "value": "Aguila Calva"
+        },
+        "especie": {
+            "_type": "str",
+            "value": "Accipitridae"
+        },
+        "habitat": {
+            "_type": "str",
+            "value": "Areas Abiertas y Acantilados"
+        },
+        "alimentacion": {
+            "_type": "str",
+            "value": "Carnivoro"
+        },
+        "esperanza_de_vida": {
+            "_type": "int",
+            "value": 30
+        }
+    }
+}
