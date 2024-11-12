@@ -1,4 +1,4 @@
-name: Code Analysis
+name: Hitos
 
 on:
   push:
