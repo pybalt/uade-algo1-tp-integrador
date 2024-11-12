@@ -20,8 +20,8 @@ def analyze_code(code):
         "exceptions": False,
         "file_operations": False,
         "regex": False,
+        "unit_tests": False,
     }
-
     for node in ast.walk(tree):
         if isinstance(node, ast.Dict):
             results["dictionaries"] = True
@@ -32,8 +32,6 @@ def analyze_code(code):
                 results["slicing"] = True
         elif isinstance(node, ast.Str):
             results["strings"] = True
-        elif isinstance(node, ast.Set):
-            results["sets"] = True
         elif isinstance(node, ast.List):
             results["lists"] = True
         elif isinstance(node, ast.Lambda):
@@ -46,14 +44,18 @@ def analyze_code(code):
                     results["filter"] = True
                 elif node.func.id == 'reduce':
                     results["reduce"] = True
+                elif node.func.id == "set":
+                    results["sets"] = True
             elif isinstance(node.func, ast.Attribute):
                 if node.func.attr in ['read', 'write', 'open']:
                     results["file_operations"] = True
         elif isinstance(node, ast.Try):
             results["exceptions"] = True
-
-    if re.search(r'\bimport\s+re\b', code):
-        results["regex"] = True
+        elif isinstance(node, ast.Import):
+            if "re" in [alias.name for alias in node.names]:
+                results["regex"] = True
+            if "unittest" in [alias.name for alias in node.names]:
+                results["unit_tests"] = True
 
     def is_recursive(function_def):
         function_name = function_def.name
@@ -86,6 +88,7 @@ def analyze_directory(directory):
         "exceptions": False,
         "file_operations": False,
         "regex": False,
+        "unit_tests": False,
     }
 
     for root, _, files in os.walk(directory):
