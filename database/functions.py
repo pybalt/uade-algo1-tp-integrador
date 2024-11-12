@@ -15,9 +15,7 @@ def create(name: str, directory):
     Example:
     >>> create("mi_base_datos", directory)
     """
-    if name in directory:
-        print(f"La base de datos {name} ya existe.")
-        return
+    assert name not in directory, f"La base de datos {name} ya existe."
     directory[name] = f'data/{name}.json'
     with open(directory[name], 'w') as f:
         json.dump({}, f, indent=4)
@@ -63,7 +61,7 @@ def delete(database_name: str, directory: dict):
     except Exception as e:
         print(f"Error al eliminar la base de datos {database_name}: {e}")
 
-def access(directory: dict):
+def access(directory: dict) -> tuple[dict, str]:
     """
     Accesses a database in the given directory.
 
@@ -86,9 +84,7 @@ def access(directory: dict):
     - The database files are expected to be in JSON format.
     """
     database_name = input("Ingrese nombre de base de datos.\n\t--> ")
-    if database_name not in directory:
-        print(f"La base de datos {database_name} no existe.")
-        return
+    assert database_name in directory, f"La base de datos {database_name} no existe."
     with open(directory[database_name], 'r') as f:
         database = json.load(f)
 

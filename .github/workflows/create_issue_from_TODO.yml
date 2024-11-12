@@ -1,0 +1,23 @@
+name: "Crear Issues desde TODOs"
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Buscar TODOs"
+        id: todo
+        uses: "alstr/todo-to-issue-action@v4"
+        with:
+          AUTO_ASSIGN: true
+          IDENTIFIERS: '["TODO", "FIXME"]'
+          COLLECTIONS_HEADER: "## Colección de TODOs encontrados:"
+          LABEL: "tarea-pendiente"
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}

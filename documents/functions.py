@@ -2,19 +2,28 @@ import uuid
 import re
 from utils import parse_value
 
-def select_distinct(database: dict) -> None:
+def select_distinct(database: dict) -> list:
     unique_documents = set()
 
-    for _, doc_data in database.items():
-        doc_str = str(doc_data)
-        unique_documents.add(doc_str)
+    # TODO: Consider that dicts can be nested
+    # on documents.functions.select_distinct
 
-    print("Documentos únicos en la base de datos:")
-    for unique_doc in unique_documents:
-        print(unique_doc)
+    for doc_id, document in database.items():
+
+        doc_tuple = tuple(sorted((k, str(v)) for k, v in document.items()))
+        unique_documents.add(doc_tuple)
+
+    result = {}
+    for i, unique_doc in enumerate(unique_documents):
+        doc_dict = {}
+        for key, value in unique_doc:
+            doc_dict[key] = value
+        result[f"Documento_{i+1}"] = doc_dict
+        
+    return result
 
 
-def search_by_regex(database: dict) -> None:
+def search_by_regex(database: dict) -> bool:
     """
     Search for documents in the database that contain a value matching the regular expression.
     Args:
@@ -35,11 +44,9 @@ def search_by_regex(database: dict) -> None:
         print(f"Document data: {document}\n")
         matches = True
 
-    if not matches:
-        print("No matches found for the entered pattern.")
+    return matches
 
-
-def create(database: dict) -> None:
+def create(database: dict) -> uuid.UUID:
     """
     Creates a new document with user-provided fields and values, and stores it in the given database.
     Args:
@@ -57,18 +64,6 @@ def create(database: dict) -> None:
     document_id = uuid.uuid4()
     document_data = {}
 
-    print("Creando un nuevo documento...")
-    print(
-        "Los tipos de datos soportados son: string, int, float, tuple, list, set, matrix"
-    )
-    print("El formato de entrada es 'tipo.valor1,valor2,...'")
-    print(
-        "Para los tipos de datos tales como set, tuple, list y matrix, separe los valores con comas."
-    )
-    print(
-        "Ademas, para los tipos de datos como matrix, separe las filas con punto y coma."
-    )
-
     field_name = input("Ingrese el nombre del campo (o 'exit()' para terminar): ")
     while field_name.lower() != "exit()":
         field_value = input(f"Ingrese el valor para el campo '{field_name}': ")
@@ -78,12 +73,11 @@ def create(database: dict) -> None:
         field_name = input("Ingrese el nombre del campo (o 'exit()' para terminar): ")
 
     database[document_id] = document_data
-
-    print(f"\nDocumento creado con ID: {document_id}")
-    print(f"Datos del documento: {document_data}\n")
+    return document_id
 
 
-def edit(database: dict) -> None:
+
+def edit(database: dict) -> bool:
     id = uuid.UUID(input("Introducir el id del documento: "))
     if id in database:
         print(id, database[id])
@@ -91,8 +85,9 @@ def edit(database: dict) -> None:
         field_value = input("Introducir el valor del campo: ")
         parsed_value = parse_value(field_value)
         database[id][field_name] = parsed_value
+        return True
     else:
-        print(f"No se encontró ningún documento con el ID: {id}")
+        return False
 
 def delete(database: dict) -> None:
     """
@@ -116,7 +111,7 @@ def delete(database: dict) -> None:
         print(f"No se encontró ningún documento con el ID: {document_id}")
 
 
-def filter_by_id(database: dict) -> None:
+def filter_by_id(database: dict) -> tuple:
     """
     Filters and prints a document from the database based on user input ID.
     Args:
@@ -130,8 +125,4 @@ def filter_by_id(database: dict) -> None:
 
     id = uuid.UUID(input("Introducir el id del documento: "))
 
-    if id in database:
-        doc = database[id]
-        print(id, doc)
-    else:
-        print(f"No se encontró ningún documento con el ID: {id}")
+    return id, database[id]
