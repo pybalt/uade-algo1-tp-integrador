@@ -117,7 +117,7 @@ def frozenset_to_readable(fset):
 def union(database1: dict, database2: dict):
     result = reduce(lambda acc, v: acc | {hashable_value(v)}, database1.values(), set())
     result |= reduce(lambda acc, v: acc | {hashable_value(v)}, database2.values(), set())
-    return result
+    return [frozenset_to_readable(f) for f in result]
 
 def intersection(database1: dict, database2: dict):
     result = set(hashable_value(v) for v in database1.values()) & set(hashable_value(v) for v in database2.values())
