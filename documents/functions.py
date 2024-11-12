@@ -30,7 +30,7 @@ def search_by_regex(database: dict) -> None:
         database.items()
     )
 
-    for doc_id, document in found_matches:
+    for doc_id, document in list(found_matches):
         print(f"Document found with ID: {str(doc_id)}")
         print(f"Document data: {document}\n")
         matches = True
