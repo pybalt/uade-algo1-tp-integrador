@@ -2,31 +2,51 @@ import uuid
 import re
 from utils import parse_value
 
+def select_distinct(database: dict) -> list:
+    unique_documents = set()
+
+    # TODO: Consider that dicts can be nested
+    # on documents.functions.select_distinct
+
+    for doc_id, document in database.items():
+
+        doc_tuple = tuple(sorted((k, str(v)) for k, v in document.items()))
+        unique_documents.add(doc_tuple)
+
+    result = {}
+    for i, unique_doc in enumerate(unique_documents):
+        doc_dict = {}
+        for key, value in unique_doc:
+            doc_dict[key] = value
+        result[f"Documento_{i+1}"] = doc_dict
+        
+    return result
 
 
-def buscar_por_expresion_regular(database: dict) -> None:
+def search_by_regex(database: dict) -> bool:
     """
-    Busca documentos en la base de datos que contengan un valor que coincida con la expresión regular.
+    Search for documents in the database that contain a value matching the regular expression.
     Args:
-        database (dict): La base de datos donde buscar documentos.
+        database (dict): The database where to search for documents.
     """
-    regex_pattern = input("Ingrese la expresión regular a buscar: ")
+    regex_pattern = input("Enter the regular expression to search for: ")
     regex = re.compile(regex_pattern)
-    coincidencias = False 
+    matches = False
 
-    for doc_id, documento in database.items():
-        for key, value in documento.items():
-                if regex.search(str(value)) or regex.search(str(key)):
-                    print(f"Documento encontrado con ID: {str(doc_id)}")
-                    print(f"Datos del documento: {documento}\n")
-                    coincidencias = True
-                    break
+    found_matches = filter(
+        lambda x: any(regex.search(str(value)) or regex.search(str(key))
+                     for key, value in x[1].items()),
+        database.items()
+    )
 
-    if not coincidencias:
-        print("No se encontraron coincidencias con el patrón ingresado.")
+    for doc_id, document in list(found_matches):
+        print(f"Document found with ID: {str(doc_id)}")
+        print(f"Document data: {document}\n")
+        matches = True
 
+    return matches
 
-def create(database: dict) -> None:
+def create(database: dict) -> uuid.UUID:
     """
     Creates a new document with user-provided fields and values, and stores it in the given database.
     Args:
@@ -41,20 +61,8 @@ def create(database: dict) -> None:
         # Document is stored in the database with a unique ID
     """
 
-    document_id = str(uuid.uuid4())
+    document_id = uuid.uuid4()
     document_data = {}
-
-    print("Creando un nuevo documento...")
-    print(
-        "Los tipos de datos soportados son: string, int, float, tuple, list, set, matrix"
-    )
-    print("El formato de entrada es 'tipo.valor1,valor2,...'")
-    print(
-        "Para los tipos de datos tales como set, tuple, list y matrix, separe los valores con comas."
-    )
-    print(
-        "Ademas, para los tipos de datos como matrix, separe las filas con punto y coma."
-    )
 
     field_name = input("Ingrese el nombre del campo (o 'exit()' para terminar): ")
     while field_name.lower() != "exit()":
@@ -64,23 +72,22 @@ def create(database: dict) -> None:
 
         field_name = input("Ingrese el nombre del campo (o 'exit()' para terminar): ")
 
-    database[tuple(document_id)] = document_data
-
-    print(f"\nDocumento creado con ID: {document_id}")
-    print(f"Datos del documento: {document_data}\n")
+    database[document_id] = document_data
+    return document_id
 
 
-def edit(database: dict) -> None:
-    id = tuple(input("Introducir el id del documento: "))
+
+def edit(database: dict) -> bool:
+    id = uuid.UUID(input("Introducir el id del documento: "))
     if id in database:
-        print("".join(id), database[id])
+        print(id, database[id])
         field_name = input("Introducir el nombre del campo a editar: ")
         field_value = input("Introducir el valor del campo: ")
         parsed_value = parse_value(field_value)
         database[id][field_name] = parsed_value
+        return True
     else:
-        print(f"No se encontró ningún documento con el ID: {id}")
-
+        return False
 
 def delete(database: dict) -> None:
     """
@@ -96,7 +103,7 @@ def delete(database: dict) -> None:
     Prompts the user to input the ID of the document to delete. If the document ID exists in the database,
     it deletes the document and prints a success message. If the document ID does not exist, it prints an error message.
     """
-    document_id = tuple(input("Ingrese el ID del documento a eliminar: "))
+    document_id = uuid.UUID(input("Ingrese el ID del documento a eliminar: "))
     if document_id in database:
         del database[document_id]
         print(f"Documento con ID: {document_id} eliminado exitosamente.")
@@ -104,7 +111,7 @@ def delete(database: dict) -> None:
         print(f"No se encontró ningún documento con el ID: {document_id}")
 
 
-def filter_by_id(database: dict) -> None:
+def filter_by_id(database: dict) -> tuple:
     """
     Filters and prints a document from the database based on user input ID.
     Args:
@@ -116,10 +123,6 @@ def filter_by_id(database: dict) -> None:
     an appropriate message.
     """
 
-    id = tuple(input("Introducir el id del documento: "))
+    id = uuid.UUID(input("Introducir el id del documento: "))
 
-    if id in database:
-        doc = database[id]
-        print(f"{''.join(id)}:\t{doc}")
-    else:
-        print(f"No se encontró ningún documento con el ID: {id}")
+    return id, database[id]

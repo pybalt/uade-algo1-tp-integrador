@@ -1,10 +1,12 @@
+import console
+
 def show_menu() -> None:
     """
     Prints the available choices to the console.
     Returns:
         None
     """
-    print("Operaciones disponibles:")
+    console.log("Operaciones disponibles:")
     explanations = [
         ("1", "Crear documento"),
         ("2", "Listar documentos"),
@@ -12,11 +14,12 @@ def show_menu() -> None:
         ("4", "Filtrar documentos por ID"),
         ("5", "Editar documento"),
         ("6", "Buscar documento por patron"),
+        ("7", "Mostrar documentos unicos"),
         ("exit()", "Volver al menú principal"),
     ]
 
     for key, value in explanations:
-        print(f"\t{key}: {value}")
+        console.log(f"\t{key}: {value}")
 
 
 def list_documents(database: dict) -> None:
@@ -39,33 +42,30 @@ def list_documents(database: dict) -> None:
         list_documents(database)
     """
     limit = len(database)
-    if limit == 0:
-        print("No hay documentos en la base de datos.")
-        return
+    assert limit > 0, "No hay documentos en la base de datos."
     
     while True:
         qty_input = input("De a cuántos documentos desea ver: ")
         
-        
         if not qty_input.strip(): 
-            print("Error: La entrada no puede estar vacía. Por favor, ingresa un número válido.")
+            console.error("Error: La entrada no puede estar vacía. Por favor, ingresa un número válido.")
             continue
 
         try:
             qty = int(qty_input)
             if qty <= 0:  
-                print("Error: Debes ingresar un número positivo.")
+                console.error("Error: Debes ingresar un número positivo.")
                 continue
             break 
 
         except ValueError:
-            print("Error: Por favor, ingresa un número válido.")
+            console.error("Error: Por favor, ingresa un número válido.")
 
     for i in range(0, limit, qty):
-        print(f"Mostrando documentos {i + 1} a {min(i + qty, limit)}:")
+        console.log(f"Mostrando documentos {i + 1} a {min(i + qty, limit)}:")
 
         for index, key in enumerate(list(database.keys())[i: i + qty], start=i + 1):
-            print(f"{index}. \"{key}\": {database[key]}")
+            console.log(f"{index}. \"{key}\": {database[key]}")
 
         if i + qty < limit:
             user_input = input("¿Deseas ver más documentos? (s/n): ")
@@ -73,4 +73,4 @@ def list_documents(database: dict) -> None:
             if user_want_to_terminate:
                 break
         else:
-            print("No hay más documentos para mostrar.")
+            console.log("No hay más documentos para mostrar.")
