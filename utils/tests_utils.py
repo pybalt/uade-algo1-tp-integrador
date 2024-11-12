@@ -3,7 +3,7 @@ from utils import parse_value
 
 class TestParseValue(unittest.TestCase):
     def test_parse_string(self):
-        resultado = parse_value("string.hola mundo")
+        resultado = parse_value("str.hola mundo")
         self.assertEqual(resultado["_type"], "string")
         self.assertEqual(resultado["value"], "hola mundo")
 
