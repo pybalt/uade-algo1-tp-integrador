@@ -46,8 +46,7 @@ def analyze_code(code):
                     results["reduce"] = True
                 elif node.func.id == "set":
                     results["sets"] = True
-            elif isinstance(node.func, ast.Attribute):
-                if node.func.attr in ['read', 'write', 'open']:
+                elif node.func.id in ['read', 'write', 'open']:
                     results["file_operations"] = True
         elif isinstance(node, ast.Try):
             results["exceptions"] = True
