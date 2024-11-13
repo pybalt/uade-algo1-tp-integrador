@@ -1,3 +1,5 @@
+import console
+
 def parse_value(value: str):
     """
     Parse the input value based on its format and return the appropriate Python type with a type tag.
@@ -11,7 +13,7 @@ def parse_value(value: str):
 
     while not parsed_correctly:
         if "." not in value:
-            print(
+            console.error(
                 "Formato inválido. El valor debe estar en el formato 'tipo.valor1,valor2,...'"
             )
             value = input("Reingrese el valor en el formato correcto: ")
@@ -49,7 +51,7 @@ def parse_value(value: str):
             parsed_data = {"_type": "matrix", "value": matrix}
             parsed_correctly = True
         else:
-            print(f"Tipo '{type_hint}' no soportado.")
+            console.error(f"Tipo '{type_hint}' no soportado.")
             value = input("Reingrese el valor en el formato correcto: ")
 
     return parsed_data
