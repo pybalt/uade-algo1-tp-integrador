@@ -1,5 +1,6 @@
 import uuid
 import re
+import console
 from utils import parse_value
 from collections.abc import Iterable
 
@@ -34,7 +35,6 @@ def search_by_regex(database: dict) -> Iterable[uuid.UUID]:
     try:
         pattern = re.compile(regex)
     except re.error:
-        print("Expresión regular inválida")
         raise ValueError("Expresión regular inválida")
 
     def search_recursive(doc_data: dict) -> bool:
@@ -87,7 +87,7 @@ def create(database: dict) -> uuid.UUID:
 def edit(database: dict) -> bool:
     id = uuid.UUID(input("Introducir el id del documento: "))
     if id in database:
-        print(id, database[id])
+        console.log(id, database[id])
         field_name = input("Introducir el nombre del campo a editar: ")
         field_value = input("Introducir el valor del campo: ")
         parsed_value = parse_value(field_value)

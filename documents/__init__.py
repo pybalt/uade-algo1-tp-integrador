@@ -18,7 +18,7 @@ def handler(database: dict) -> None:
     while option != "exit()":
         try:
             if option == "1":
-                console.log("Creando un nuevo documento...\n"
+                console.warning("Creando un nuevo documento...\n"
                             +"Los tipos de datos soportados son: string, int, float, tuple, list, set, matrix\n"
                             +"El formato de entrada es 'tipo.valor1,valor2,...'\n"
                             +"Para los tipos de datos tales como set, tuple, list y matrix, separe los valores con comas.\n"
