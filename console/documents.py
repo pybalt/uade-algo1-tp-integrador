@@ -6,7 +6,7 @@ def show_menu() -> None:
     Returns:
         None
     """
-    console.log("Operaciones disponibles:")
+
     explanations = [
         ("1", "Crear documento"),
         ("2", "Listar documentos"),
@@ -17,10 +17,8 @@ def show_menu() -> None:
         ("7", "Mostrar documentos unicos"),
         ("exit()", "Volver al menú principal"),
     ]
-
-    for key, value in explanations:
-        console.log(f"\t{key}: {value}")
-
+    option, title = console.show_options_menu(explanations, "Operaciones disponibles")
+    return option
 
 def list_documents(database: dict) -> None:
     """

@@ -13,8 +13,7 @@ def handler(database: dict) -> None:
     None
     """
 
-    console.documents.show_menu()
-    option = input("Seleccione una opción:\n\t--> ")
+    option = console.documents.show_menu()
     while option != "exit()":
         try:
             if option == "1":
@@ -51,8 +50,8 @@ def handler(database: dict) -> None:
                 console.log("Documentos únicos en la base de datos:")
                 console.documents.list_documents(unique_documents)
 
-            console.documents.show_menu()
-            option = input("Seleccione una opción:\n\t--> ")
+            console.pause_program()
+            option = console.documents.show_menu()
         except AssertionError as e:
             console.error(e)
         except KeyError as e:

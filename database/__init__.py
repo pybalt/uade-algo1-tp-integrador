@@ -5,11 +5,7 @@ import documents
 
 
 def handler(directory) -> str:
-    console.databases.show_menu()
-    user_input = input("Seleccione una opcion\n\t--> ").lower()
-
-    # TODO: Reformat this function to use the console module. database.__init__.handler
-    # TODO: Reformat try-except blocks to use console.error and console.log. database.__init__.handler
+    user_input = console.databases.show_menu()
     try:
         if user_input == "a":
             console.databases.list_databases(directory)
@@ -38,13 +34,17 @@ def handler(directory) -> str:
             console.databases.show_set_operation(symmetric_difference(database1, database2))
         elif user_input == "exit()":
             console.exit()
+            raise SystemExit
+        console.pause_program()
+        return user_input
     except AssertionError as e:
         console.error(e)
     except KeyboardInterrupt:
+        pass
+    except SystemExit:
         pass
     finally:
         if 'database' in locals() and 'database_name' in locals():
             save(database, database_name, directory)
             console.log(f"Base de datos {database_name} guardada exitosamente.")
             update_dictory()
-    return user_input

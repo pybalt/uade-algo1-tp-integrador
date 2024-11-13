@@ -3,8 +3,9 @@ import re
 import console
 from utils import parse_value
 from collections.abc import Iterable
+from re import Match
 
-def select_distinct(database: dict) -> list:
+def select_distinct(database: dict) -> dict:
     unique_documents = set()
 
     # TODO: Consider that dicts can be nested
@@ -37,7 +38,7 @@ def search_by_regex(database: dict) -> Iterable[uuid.UUID]:
     except re.error:
         raise ValueError("Expresión regular inválida")
 
-    def search_recursive(doc_data: dict) -> bool:
+    def search_recursive(doc_data: dict) -> Match[str] | bool | None:
         if isinstance(doc_data, dict):
             for key, value in doc_data.items():
                 if pattern.search(str(key)) or search_recursive(value):
@@ -46,6 +47,7 @@ def search_by_regex(database: dict) -> Iterable[uuid.UUID]:
             for item in doc_data:
                 if search_recursive(item):
                     return True
+
         return pattern.search(str(doc_data))
     result = {}
     matches = filter(lambda x: search_recursive(database[x]), database.keys())
