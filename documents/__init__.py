@@ -56,3 +56,5 @@ def handler(database: dict) -> None:
             console.error(e)
         except KeyError as e:
             console.error(e)
+        except KeyboardInterrupt:
+            break

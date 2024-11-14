@@ -17,7 +17,8 @@ def start():
 
             user_input = handler(directory)
     except KeyboardInterrupt:
-        console.log("\nGracias por usar Base Builders!")
+        exit()
     finally:
+        console.log("\nGracias por usar Base Builders!")
         if 'directory' in locals() and directory.keys():
             update_dictory()

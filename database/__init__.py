@@ -34,15 +34,14 @@ def handler(directory) -> str:
             console.databases.show_set_operation(symmetric_difference(database1, database2))
         elif user_input == "exit()":
             console.exit()
-            raise SystemExit
         console.pause_program()
         return user_input
     except AssertionError as e:
         console.error(e)
     except KeyboardInterrupt:
-        pass
+        raise KeyboardInterrupt
     except SystemExit:
-        pass
+        raise SystemExit
     finally:
         if 'database' in locals() and 'database_name' in locals():
             save(database, database_name, directory)
