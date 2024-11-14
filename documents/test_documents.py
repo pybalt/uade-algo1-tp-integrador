@@ -1,5 +1,6 @@
 import unittest
 from documents import *
+from .functions import select_distinct
 
 # pruebas
 DIRECTORY = {
@@ -29,3 +30,6 @@ def test_filter_by_id():
     # Prueba la función `filter_by_id` para buscar un documento por ID
     doc_id = 'doc1'
     assert doc_id in DATABASE  # Verifica que el documento existe
+
+
+
