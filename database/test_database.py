@@ -1,7 +1,7 @@
 import unittest
 import os
 import json
-from database.functions import save
+from database.functions import save, delete
 
 
 class TestSaveFunction(unittest.TestCase):
@@ -53,5 +53,11 @@ class TestSaveFunction(unittest.TestCase):
             saved_content = json.load(f)
             self.assertEqual(saved_content, content)
 
-if __name__ == '__main__':
+    def test_delete_mascotas_database(self):
+        delete("mascotas", self.mock_directory)
+        self.assertNotIn("mascotas", self.mock_directory)
+        self.assertFalse(os.path.exists(self.mock_directory["mascotas"]))
+    
+
+if __name__ == '_main_':
     unittest.main()
