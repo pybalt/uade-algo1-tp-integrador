@@ -1,35 +1,43 @@
-import unittest
+from unittest.mock import patch
+import uuid
 from documents import *
-from .functions import select_distinct
 
-# pruebas
-DIRECTORY = {
-    "db1": {"doc1": {"name": "Prueba"}},
-    "db2": {"doc2": {"name": "Prueba2"}}
-}
+
 DATABASE = {"doc1": {"name": "Prueba"}}
 
-
 def test_create_document():
-    create(DATABASE)
-    assert len(DATABASE) == 2  # Verifica que se ha añadido un nuevo documento
+    with patch('builtins.input', side_effect=[
+        "name",  
+        "str.NuevoDoc",  
+        "exit()"  
+    ]):
+        new_doc_id = create(DATABASE)
+    
+    
+    assert len(DATABASE) == 2  
+    assert new_doc_id in DATABASE  
+    
+    
+    assert DATABASE[new_doc_id]["name"] == {'_type': 'str', 'value': 'NuevoDoc'}
 
 def test_edit_document():
     doc_id = 'doc1'
     if doc_id in DATABASE:
         DATABASE[doc_id]["name"] = "Nuevo"
-    assert DATABASE[doc_id]["name"] == "Nuevo"  # Verifica que el nombre fue cambiado
+    assert DATABASE[doc_id]["name"] == "Nuevo"  
 
 def test_delete_document():
     doc_id = 'doc1'
     if doc_id in DATABASE:
         del DATABASE[doc_id]
-    assert doc_id not in DATABASE  # Verifica que el documento ha sido eliminado
+    assert doc_id not in DATABASE 
 
 def test_filter_by_id():
-    # Prueba la función `filter_by_id` para buscar un documento por ID
-    doc_id = 'doc1'
-    assert doc_id in DATABASE  # Verifica que el documento existe
+    doc_id = uuid.uuid4()  
+    DATABASE[doc_id] = {"name": "Prueba"}
 
-
-
+    with patch('builtins.input', return_value=str(doc_id)):  
+        result_id, document = filter_by_id(DATABASE)
+    
+    assert result_id == doc_id  
+    assert document["name"] == "Prueba" 
