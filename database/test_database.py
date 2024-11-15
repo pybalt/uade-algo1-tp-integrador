@@ -9,7 +9,7 @@ class TestSaveFunction(unittest.TestCase):
     def setUp(self):
         self.mock_directory = {
             "animales": "data/animales.json",
-            "mascotas": "data/mascotas.json"
+            "mascotas": "data/directory.json"
         }
         os.makedirs(os.path.dirname(self.mock_directory["animales"]), exist_ok=True)
         os.makedirs(os.path.dirname(self.mock_directory["mascotas"]), exist_ok=True)
