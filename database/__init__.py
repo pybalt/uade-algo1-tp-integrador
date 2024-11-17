@@ -19,7 +19,6 @@ def handler(directory) -> str:
         elif user_input == "c":
             name = input("Ingrese el nombre de la base de datos: ")
             create(name, directory)
-            console.log(f"Base de datos {name} creada exitosamente.")
         elif user_input == "d":
             database1, _ = access(directory)
             database2, _ = access(directory)
@@ -39,12 +38,13 @@ def handler(directory) -> str:
         elif user_input == "exit()":
             console.exit()
     except AssertionError as e:
-        console.error(e)
+        console.error(e)  
+        console.log("Ocurrio un error de tipo AssertionError.") 
     except KeyboardInterrupt:
+        console.log("Interrupción del teclado recibida.")  
         pass
     finally:
         if 'database' in locals() and 'database_name' in locals():
             save(database, database_name, directory)
-            console.log(f"Base de datos {database_name} guardada exitosamente.")
             update_dictory()
     return user_input
