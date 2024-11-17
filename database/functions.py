@@ -19,7 +19,7 @@ def create(name: str, directory):
     directory[name] = f'data/{name}.json'
     with open(directory[name], 'w') as f:
         json.dump({}, f, indent=4)
-    print(f"Base de datos {name} creada exitosamente.")
+
 
 def str_to_uuid(data: dict):
     new_dict = {}
@@ -46,20 +46,33 @@ def save(content: dict, database_name: str, directory: dict):
     content = uuid_to_str(content)
     with open(file_path, 'w') as f:
         json.dump(content, f, indent=4)
-    print(f"Base de datos {database_name} guardada exitosamente.")
 
 def delete(database_name: str, directory: dict):
-    if database_name not in directory:
-        print(f"La base de datos {database_name} no existe.")
-        return
+    """
+    Deletes a database from the given directory.
+    Parameters:
+    - database_name (str): The name of the database to delete.
+    - directory (dict): The directory containing the database mappings.
+
+    Returns:
+    None
+
+    Raises:
+    - AssertionError: If the database does not exist in the directory.
+
+    Example:
+    >>> delete("mi_base_datos", directory)
+    >>> save(directory)
+
+    Remember to save the directory after deleting a database.
+    """
+
+    assert database_name in directory, f"La base de datos {database_name} no existe."
     file_path = directory[database_name]
-    try:
-        os.remove(file_path)
-        del directory[database_name]
-        save(directory, "directory", directory)
-        print(f"Base de datos {database_name} eliminada exitosamente.")
-    except Exception as e:
-        print(f"Error al eliminar la base de datos {database_name}: {e}")
+    os.remove(file_path)
+    del directory[database_name]
+
+
 
 def access(directory: dict) -> tuple[dict, str]:
     """

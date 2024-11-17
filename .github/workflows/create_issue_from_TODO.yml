@@ -1,4 +1,4 @@
-name: "Run TODO to Issue"
+name: "Create TODOs from code"
 on: [ "push" ]
 jobs:
   build:

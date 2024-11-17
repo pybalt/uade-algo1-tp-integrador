@@ -1,4 +1,5 @@
 import pprint
+import console
 
 def list_databases(directory: dict) -> None:
     """
@@ -35,7 +36,7 @@ def show_menu() -> None:
         None
     """
 
-    print("Sus opciones son")
+    console.log("Sus opciones son")
 
     explanations = [
         ("A", "Listar bases de datos"),
@@ -49,12 +50,12 @@ def show_menu() -> None:
     ]
 
     for key, value in explanations:
-        print(f"\t{key}: {value}")
+        console.log(f"\t{key}: {value}")
 
 def show_set_operation(dataset: dict) -> None:
     """
     Prints the result of the set operation.
     """
-    print("El resultado de la operación es:")
+    console.log("El resultado de la operación es:")
     for dict in dataset:
         pprint.pprint(dict)

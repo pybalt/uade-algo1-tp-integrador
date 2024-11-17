@@ -1,6 +1,7 @@
 from database import *
+import console
 import console.databases
-import documents
+
 
 def start():
     try:
@@ -9,12 +10,13 @@ def start():
         fill(directory)
         while user_input != "exit()":
             if not directory:
-                print("No se han creado bases de datos.")
+                console.log("No se han creado bases de datos.")
                 database_name = input("Ingrese nombre de base de datos.\n\t--> ")
                 create(database_name, directory)
+                console.log(f"Base de datos {database_name} creada exitosamente.")
 
             user_input = handler(directory)
     except KeyboardInterrupt:
-        print("\nGracias por usar Base Builders!")
+        console.log("\nGracias por usar Base Builders!")
     finally:
         update_dictory()
