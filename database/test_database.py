@@ -56,8 +56,8 @@ class TestSaveFunction(unittest.TestCase):
     def test_delete_mascotas_database(self):
         delete("mascotas", self.mock_directory)
         self.assertNotIn("mascotas", self.mock_directory)
-        self.assertFalse(os.path.exists(self.mock_directory["mascotas"]))
+        self.assertFalse(os.path.exists("data/directory.json"))  
     
 
-if __name__ == '_main_':
+if __name__ == '__main__':
     unittest.main()

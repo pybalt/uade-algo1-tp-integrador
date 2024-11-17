@@ -56,7 +56,7 @@ def delete(database_name: str, directory: dict):
     try:
         os.remove(file_path)
         del directory[database_name]
-        save(directory)
+        save(directory, "directory", directory)
         print(f"Base de datos {database_name} eliminada exitosamente.")
     except Exception as e:
         print(f"Error al eliminar la base de datos {database_name}: {e}")
