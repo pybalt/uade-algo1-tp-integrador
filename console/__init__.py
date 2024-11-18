@@ -15,8 +15,7 @@ if os.name == "nt":
     # Value 7 enables: ENABLE_PROCESSED_OUTPUT (1) | ENABLE_WRAP_AT_EOL_OUTPUT (2) | ENABLE_VIRTUAL_TERMINAL_PROCESSING (4)
     kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
 else:
-    error("This program is only compatible with Windows.")
-    sys.exit()
+    print("This program is only compatible with Windows.")
 
 def exit() -> None:
     print()
