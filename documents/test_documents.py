@@ -67,6 +67,23 @@ def test_search_by_regex_invalid_pattern():
         except ValueError as e:
             assert str(e) == "Expresión regular inválida"
 
+def test_search_recursive_with_list():
+
+    database = {
+        "doc1": {"prueba": ["X", "Y", "Z"]},  
+        "doc2": {"prueba": ["A", "B", "C"]},  
+        "doc3": {"prueba": "XY"}              
+    }
+
+    with patch('builtins.input', return_value="X"):
+        matches = search_by_regex(database)
+
+        assert isinstance(matches, dict)
+        assert len(matches) == 2  
+
+        assert "doc1" in matches
+        assert "doc3" in matches  
+
 def test_edit_document():
     doc_id = uuid.uuid4()
     DATABASE[doc_id] = {"name": "Original"}
