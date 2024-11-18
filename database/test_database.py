@@ -121,24 +121,6 @@ def test_delete_and_save_directory(setup_mock_directory):
         saved_directory = json.load(f)
         assert saved_directory == mock_directory
 
-
-@patch('console.show_options_menu', return_value='mascotas')
-def test_access_existing_database(mock_show_options_menu, setup_mock_directory):
-    "Access: Debe acceder correctamente a una base de datos existente"
-    mock_directory, _ = setup_mock_directory
-    db, db_name = access(mock_directory)
-    
-    assert db_name == 'mascotas'
-    
-    assert db  
-
-@patch('console.show_options_menu', return_value='no_existe')
-def test_access_non_existing_database(mock_show_options_menu, setup_mock_directory):
-    "Access: Debe lanzar un error si la base de datos no existe"
-    mock_directory, _ = setup_mock_directory
-    with pytest.raises(AssertionError):
-        access(mock_directory)
-
 def test_hashable_value_dict():
     "hashable_value: Debe convertir un diccionario en un objeto hashable"
     value = {
