@@ -1,5 +1,3 @@
-name: Test Coverage
-
 on:
   push:
     branches: [ main ]
@@ -35,6 +33,18 @@ jobs:
     - name: Update README.md with coverage badge
       run: |
         echo "![Coverage](./coverage.svg)" > README.md
+
+    - name: Create gh-pages branch if not exists
+      run: |
+        git fetch origin
+        if ! git show-ref --verify --quiet refs/heads/gh-pages; then
+          git checkout --orphan gh-pages
+          git reset --hard
+          git commit --allow-empty -m "Initial gh-pages commit"
+          git push origin gh-pages
+        else
+          git checkout gh-pages
+        fi
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
