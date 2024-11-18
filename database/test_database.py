@@ -121,7 +121,6 @@ def test_delete_and_save_directory(setup_mock_directory):
         saved_directory = json.load(f)
         assert saved_directory == mock_directory
 
-from unittest.mock import patch
 
 @patch('console.show_options_menu', return_value='mascotas')
 def test_access_existing_database(mock_show_options_menu, setup_mock_directory):
