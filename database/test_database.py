@@ -1,7 +1,8 @@
 import os
 import json
 import pytest
-from database.functions import save, delete,union, intersection, difference, symmetric_difference
+import uuid
+from database.functions import save, delete,union, intersection, difference, symmetric_difference, str_to_uuid, uuid_to_str
 
 @pytest.fixture
 def setup_mock_directory():
@@ -101,6 +102,34 @@ def test_delete_and_save_directory(setup_mock_directory):
     with open("test/directory.json", 'r') as f:
         saved_directory = json.load(f)
         assert saved_directory == mock_directory
+
+def test_str_to_uuid():
+    "str_to_uuid: Debe convertir las claves UUID de cadena a uuid.UUID"
+    data = {
+        "UUID(929fb381-c97a-46bf-bf9f-af96d626063e)": "valor1",
+        "otra_clave": "valor2"
+    }
+    result = str_to_uuid(data)
+    
+    expected_key = uuid.UUID("929fb381-c97a-46bf-bf9f-af96d626063e")
+    
+    assert isinstance(list(result.keys())[0], uuid.UUID)
+    
+    assert result[expected_key] == "valor1"
+    
+    assert result["otra_clave"] == "valor2"
+
+def test_uuid_to_str():
+    "uuid_to_str: Debe convertir las claves uuid.UUID de vuelta a cadenas con el formato 'UUID(...)'"
+    data = {
+        uuid.UUID("929fb381-c97a-46bf-bf9f-af96d626063e"): "valor1",
+        "otra_clave": "valor2"
+    }
+    result = uuid_to_str(data)
+    assert isinstance(list(result.keys())[0], str)
+    assert list(result.keys())[0] == "UUID(929fb381-c97a-46bf-bf9f-af96d626063e)"
+    assert result["UUID(929fb381-c97a-46bf-bf9f-af96d626063e)"] == "valor1"
+    assert result["otra_clave"] == "valor2"
 
 def test_union_databases(setup_mock_directory):
     "Union: Debe realizar la unión entre dos bases de datos"
