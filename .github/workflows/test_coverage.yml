@@ -54,6 +54,13 @@ jobs:
           git pull origin gh-pages
         fi
 
+    - name: Copy coverage files
+      continue-on-error: true
+      run: |
+        cp -rf htmlcov/* .
+        cp -f coverage.svg .
+        cp -f README.md .
+
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
