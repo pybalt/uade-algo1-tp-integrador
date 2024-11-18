@@ -1,3 +1,4 @@
+from multiprocessing import Value
 from .directory import *
 from .functions import *
 import console.databases
@@ -5,17 +6,13 @@ import documents
 
 
 def handler(directory) -> str:
-    console.databases.show_menu()
-    user_input = input("Seleccione una opcion\n\t--> ").lower()
-
-    # TODO: Reformat this function to use the console module. database.__init__.handler
-    # TODO: Reformat try-except blocks to use console.error and console.log. database.__init__.handler
+    user_input = console.databases.show_menu()
     try:
         if user_input == "a":
             console.databases.list_databases(directory)
         elif user_input == "b":
             database, database_name = access(directory)
-            documents.handler(database)
+            documents.handler(database, database_name)
         elif user_input == "c":
             name = input("Ingrese el nombre de la base de datos: ")
             create(name, directory)
@@ -38,13 +35,21 @@ def handler(directory) -> str:
             console.databases.show_set_operation(symmetric_difference(database1, database2))
         elif user_input == "exit()":
             console.exit()
+        console.pause_program()
+        return user_input
     except AssertionError as e:
         console.error(e)
     except KeyboardInterrupt:
-        pass
+        raise KeyboardInterrupt
+    except SystemExit:
+        raise SystemExit
+    except Exception as e:
+        console.error(e)
+        console.pause_program()
+        return user_input
     finally:
         if 'database' in locals() and 'database_name' in locals():
             save(database, database_name, directory)
-            console.log(f"Base de datos {database_name} guardada exitosamente.")
             update_dictory()
-    return user_input
+            console.log(f"Base de datos {database_name} guardada exitosamente.")
+            console.ellipsis()

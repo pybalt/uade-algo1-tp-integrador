@@ -1,12 +1,12 @@
 import console
 
-def show_menu() -> None:
+def show_menu(database_name: str) -> None:
     """
     Prints the available choices to the console.
     Returns:
         None
     """
-    console.log("Operaciones disponibles:")
+
     explanations = [
         ("1", "Crear documento"),
         ("2", "Listar documentos"),
@@ -17,10 +17,8 @@ def show_menu() -> None:
         ("7", "Mostrar documentos unicos"),
         ("exit()", "Volver al menú principal"),
     ]
-
-    for key, value in explanations:
-        console.log(f"\t{key}: {value}")
-
+    option, title = console.show_options_menu(explanations, f"Base de datos: {database_name}")
+    return option
 
 def list_documents(database: dict) -> None:
     """

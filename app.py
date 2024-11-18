@@ -1,11 +1,11 @@
 from database import *
 import console
 import console.databases
-
+import console
 
 def start():
     try:
-        user_input = input("")
+        user_input = ""
         directory = get_directory()
         fill(directory)
         while user_input != "exit()":
@@ -17,6 +17,8 @@ def start():
 
             user_input = handler(directory)
     except KeyboardInterrupt:
-        console.log("\nGracias por usar Base Builders!")
+        exit()
     finally:
-        update_dictory()
+        console.log("\nGracias por usar Base Builders!")
+        if 'directory' in locals() and directory.keys():
+            update_dictory()
