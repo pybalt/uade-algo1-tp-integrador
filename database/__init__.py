@@ -11,7 +11,7 @@ def handler(directory) -> str:
             console.databases.list_databases(directory)
         elif user_input == "b":
             database, database_name = access(directory)
-            documents.handler(database)
+            documents.handler(database, database_name)
         elif user_input == "c":
             name = input("Ingrese el nombre de la base de datos: ")
             create(name, directory)
@@ -45,5 +45,6 @@ def handler(directory) -> str:
     finally:
         if 'database' in locals() and 'database_name' in locals():
             save(database, database_name, directory)
-            console.log(f"Base de datos {database_name} guardada exitosamente.")
             update_dictory()
+            console.log(f"Base de datos {database_name} guardada exitosamente.")
+            console.ellipsis()

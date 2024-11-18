@@ -17,9 +17,9 @@ def list_databases(directory: dict) -> None:
     None
     """
 
+    print()
     for key, db in enumerate(directory):
-
-        print(key + 1, db)
+        console.log(f"\t{ key + 1 }: { db }")
 
 
 def show_menu() -> str:

@@ -88,5 +88,23 @@
             "_type": "str",
             "value": "Canario"
         }
+    },
+    "UUID(421ccc2c-872c-41c4-9aea-801a9ef548fd)": {
+        "nombre": {
+            "_type": "str",
+            "value": "Finn"
+        },
+        "especie": {
+            "_type": "str",
+            "value": "Huron"
+        },
+        "edad": {
+            "_type": "int",
+            "value": 2
+        },
+        "raza": {
+            "_type": "str",
+            "value": "Huron Domestico"
+        }
     }
 }

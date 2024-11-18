@@ -2,7 +2,7 @@ from .functions import *
 import console.documents
 
 
-def handler(database: dict) -> None:
+def handler(database: dict, database_name: str) -> None:
     """
     Provides options to operate within the selected database.
 
@@ -13,7 +13,7 @@ def handler(database: dict) -> None:
     None
     """
 
-    option = console.documents.show_menu()
+    option = console.documents.show_menu(database_name)
     while option != "exit()":
         try:
             if option == "1":
@@ -51,7 +51,7 @@ def handler(database: dict) -> None:
                 console.documents.list_documents(unique_documents)
 
             console.pause_program()
-            option = console.documents.show_menu()
+            option = console.documents.show_menu(database_name)
         except AssertionError as e:
             console.error(e)
         except KeyError as e:
