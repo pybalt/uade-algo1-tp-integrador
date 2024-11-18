@@ -24,7 +24,7 @@ jobs:
     - name: Run tests with coverage
       continue-on-error: true
       run: |
-        pytest --cov=./ --cov-report=html --cov-report=term
+          pytest --cov=database --cov=documents --cov=utils --cov-report=html --cov-report=term
 
     - name: Generate coverage badge
       run: |
@@ -48,13 +48,21 @@ jobs:
           git checkout --orphan gh-pages
           git reset --hard
           git commit --allow-empty -m "Initial gh-pages commit"
-          git push origin gh-pages
+          git push --force origin gh-pages
         else
           git checkout gh-pages
+          git pull origin gh-pages
         fi
+
+    - name: Copy coverage files
+      continue-on-error: true
+      run: |
+        cp -rf htmlcov/* .
+        cp -f coverage.svg .
+        cp -f README.md .
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./htmlcov
+        publish_dir: .
