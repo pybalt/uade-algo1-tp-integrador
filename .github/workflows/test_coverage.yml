@@ -48,9 +48,10 @@ jobs:
           git checkout --orphan gh-pages
           git reset --hard
           git commit --allow-empty -m "Initial gh-pages commit"
-          git push origin gh-pages
+          git push --force origin gh-pages
         else
           git checkout gh-pages
+          git pull origin gh-pages
         fi
 
     - name: Copy coverage files
