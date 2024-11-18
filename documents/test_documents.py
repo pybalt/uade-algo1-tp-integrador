@@ -1,7 +1,46 @@
+import unittest
 from unittest.mock import patch
 import uuid
 from documents import *
 
+class BaseTestDatabase(unittest.TestCase):
+
+    def setUp(self):
+        "Funcion que se ejecuta antes de cada test"
+        self.mock_directory = {
+            "mascotas": "test/mascotas.json"
+        }
+        self.content = {
+            "UUID(929fb381-c97a-46bf-bf9f-af96d626063e)": {
+                "nombre": {"_type": "str", "value": "Negra"},
+                "especie": {"_type": "str", "value": "Gato"},
+                "edad": {"_type": "int", "value": 3},
+                "raza": {"_type": "str", "value": "Siames"}
+            },
+            "UUID(33c70af2-a121-4cff-ad41-f962c1986157)": {
+                "nombre": {"_type": "str", "value": "Duque"},
+                "especie": {"_type": "str", "value": "Perro"},
+                "edad": {"_type": "int", "value": 5},
+                "raza": {"_type": "str", "value": "Labrador"}
+            }
+        }
+        if not os.path.exists("test"):
+            os.mkdir("test")
+        with open(self.mock_directory["mascotas"], 'w+') as f:
+            json.dump(self.content, f)
+
+    def tearDown(self):
+        "Funcion que se ejecuta despues de cada test"
+        for file in self.mock_directory.values():
+            if os.path.exists(file):
+                os.remove(file)
+        
+        # Eliminar el archivo que lista los directorios
+        if os.path.exists("test/directory.json"):
+            os.remove("test/directory.json")
+
+        # Eliminar el directorio de prueba        
+        os.path.exists("test") and os.rmdir("test")
 
 DATABASE = {"doc1": {"name": "Prueba"}}
 
