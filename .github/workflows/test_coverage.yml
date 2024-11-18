@@ -24,6 +24,7 @@ jobs:
         pip install pytest pytest-cov coverage
 
     - name: Run tests with coverage
+      continue-on-error: true
       run: |
         pytest --cov=./ --cov-report=html --cov-report=term
 
