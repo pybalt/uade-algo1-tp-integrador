@@ -8,19 +8,33 @@ from re import Match
 def select_distinct(database: dict) -> dict:
     unique_documents = set()
 
-    # TODO: Consider that dicts can be nested
-    # on documents.functions.select_distinct
+    def flatten_dict(d: dict, parent_key='', sep='.') -> dict:
+        items = []
+        for k, v in d.items():
+            new_key = f"{parent_key}{sep}{k}" if parent_key else k
+            if isinstance(v, dict):
+                items.extend(flatten_dict(v, new_key, sep=sep).items())
+            else:
+                items.append((new_key, str(v)))
+        return dict(items)
 
     for doc_id, document in database.items():
-
-        doc_tuple = tuple(sorted((k, str(v)) for k, v in document.items()))
+        # Flatten nested dictionaries and convert to tuple for hashing
+        flattened = flatten_dict(document)
+        doc_tuple = tuple(sorted((k, v) for k, v in flattened.items()))
         unique_documents.add(doc_tuple)
 
     result = {}
     for i, unique_doc in enumerate(unique_documents):
+        # Reconstruct nested structure
         doc_dict = {}
         for key, value in unique_doc:
-            doc_dict[key] = value
+            parts = key.split('.')
+            current = doc_dict
+            for part in parts[:-1]:
+                current = current.setdefault(part, {})
+            current[parts[-1]] = value
+            
         result[f"Documento_{i+1}"] = doc_dict
         
     return result
