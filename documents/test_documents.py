@@ -20,18 +20,26 @@ def test_create_document():
     
     assert DATABASE[new_doc_id]["name"] == {'_type': 'str', 'value': 'NuevoDoc'}
 
-def test_select_distinct():
+def test_select_distinct_count():
     database = {
         "doc1": {"prueba": "Y"},
         "doc2": {"prueba": "X"},
         "doc3": {"prueba": "Y"},  
     }
     distinct_docs = select_distinct(database)
-    
-    assert len(distinct_docs) == 2  
-    
+
+    assert len(distinct_docs) == 2
+
+def test_select_distinct_content():
+    database = {
+        "doc1": {"prueba": "Y"},
+        "doc2": {"prueba": "X"},
+        "doc3": {"prueba": "Y"},  
+    }
+    distinct_docs = select_distinct(database)
+
     assert any(doc["prueba"] == "Y" for doc in distinct_docs.values())
-    assert any(doc["prueba"] == "X"for doc in distinct_docs.values())
+    assert any(doc["prueba"] == "X" for doc in distinct_docs.values())
 
 def test_search_by_regex():
     database = {
@@ -41,25 +49,40 @@ def test_search_by_regex():
     }
 
     with patch('builtins.input', return_value="X"):
-        with patch('builtins.print') as mock_print:
-            matches = search_by_regex(database)
-            
-            assert matches == True
+        matches = search_by_regex(database)
 
-            mock_print.assert_any_call("Document found with ID: doc1")
-            mock_print.assert_any_call("Document found with ID: doc2")
+        assert isinstance(matches, dict)
+
+        assert len(matches) == 2
+
+        assert "doc1" in matches
+        assert "doc2" in matches
+
+        assert "doc3" not in matches
 
 def test_edit_document():
-    doc_id = 'doc1'
-    if doc_id in DATABASE:
-        DATABASE[doc_id]["name"] = "Nuevo"
-    assert DATABASE[doc_id]["name"] == "Nuevo"  
+    doc_id = uuid.uuid4()
+    DATABASE[doc_id] = {"name": "Original"}
+    
+    with patch('builtins.input', side_effect=[
+        str(doc_id),  
+        "name",       
+        "str.Editado" 
+    ]):
+        result = edit(DATABASE)
+    
+    assert result is True
+    assert DATABASE[doc_id]["name"] == {'_type': 'str', 'value': 'Editado'}
 
 def test_delete_document():
-    doc_id = 'doc1'
-    if doc_id in DATABASE:
-        del DATABASE[doc_id]
-    assert doc_id not in DATABASE 
+
+    doc_id = uuid.uuid4()
+    DATABASE[doc_id] = {"name": "ParaEliminar"}
+    
+    with patch('builtins.input', return_value=str(doc_id)):
+        delete(DATABASE)
+    
+    assert doc_id not in DATABASE
 
 def test_filter_by_id():
     doc_id = uuid.uuid4()  
