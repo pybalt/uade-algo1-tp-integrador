@@ -24,7 +24,7 @@ jobs:
     - name: Run tests with coverage
       continue-on-error: true
       run: |
-        pytest --cov=./ --cov-report=html --cov-report=term
+          pytest --cov=database --cov=documents --cov=utils --cov-report=html --cov-report=term
 
     - name: Generate coverage badge
       run: |
