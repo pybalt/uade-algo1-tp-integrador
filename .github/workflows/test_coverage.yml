@@ -56,10 +56,13 @@ jobs:
 
     - name: Copy coverage files
       run: |
-        cp -r htmlcov/* .
+        mkdir -p gh-pages
+        cp -r htmlcov/* gh-pages/
+        cp coverage.svg gh-pages/
+        cp README.md gh-pages/
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./
+        publish_dir: gh-pages
