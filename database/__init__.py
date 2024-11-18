@@ -1,3 +1,4 @@
+from multiprocessing import Value
 from .directory import *
 from .functions import *
 import console.databases
@@ -42,6 +43,10 @@ def handler(directory) -> str:
         raise KeyboardInterrupt
     except SystemExit:
         raise SystemExit
+    except Exception as e:
+        console.error(e)
+        console.pause_program()
+        return user_input
     finally:
         if 'database' in locals() and 'database_name' in locals():
             save(database, database_name, directory)
