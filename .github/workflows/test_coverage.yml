@@ -56,9 +56,9 @@ jobs:
 
     - name: Copy coverage files
       run: |
-        cp -r htmlcov/* .
-        cp coverage.svg .
-        cp README.md .
+        cp -rf htmlcov/* .
+        cp -f coverage.svg .
+        cp -f README.md .
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
