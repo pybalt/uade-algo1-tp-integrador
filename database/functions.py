@@ -1,4 +1,6 @@
 import json, os, uuid
+import console
+
 from functools import reduce
 
 def create(name: str, directory):
@@ -95,7 +97,7 @@ def access(directory: dict) -> tuple[dict, str]:
     - The function uses input() to get the database name from the user.
     - The database files are expected to be in JSON format.
     """
-    database_name = input("Ingrese nombre de base de datos.\n\t--> ")
+    database_name = console.show_options_menu(list(directory.keys()), "Base de datos existentes")
     assert database_name in directory, f"La base de datos {database_name} no existe."
     with open(directory[database_name], 'r') as f:
         database = json.load(f)

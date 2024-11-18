@@ -17,12 +17,12 @@ def list_databases(directory: dict) -> None:
     None
     """
 
+    print()
     for key, db in enumerate(directory):
+        console.log(f"\t{ key + 1 }: { db }")
 
-        print(key + 1, db)
 
-
-def show_menu() -> None:
+def show_menu() -> str:
     """
 
     Prints the available choices to the console.
@@ -36,8 +36,6 @@ def show_menu() -> None:
         None
     """
 
-    console.log("Sus opciones son")
-
     explanations = [
         ("A", "Listar bases de datos"),
         ("B", "Acceder directamente a una base de datos"),
@@ -48,9 +46,8 @@ def show_menu() -> None:
         ("G", "Diferencia simétrica de dos bases de datos"),
         ("exit()", "Salir del programa"),
     ]
-
-    for key, value in explanations:
-        console.log(f"\t{key}: {value}")
+    option, title = console.show_options_menu(explanations, "Operaciones disponibles")
+    return option.lower()
 
 def show_set_operation(dataset: dict) -> None:
     """
