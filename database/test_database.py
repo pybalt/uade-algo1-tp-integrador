@@ -1,7 +1,7 @@
 import os
 import json
 import pytest
-from database.functions import save, delete
+from database.functions import save, delete,union, intersection, difference, symmetric_difference
 
 @pytest.fixture
 def setup_mock_directory():
@@ -101,3 +101,67 @@ def test_delete_and_save_directory(setup_mock_directory):
     with open("test/directory.json", 'r') as f:
         saved_directory = json.load(f)
         assert saved_directory == mock_directory
+
+def test_union_databases(setup_mock_directory):
+    "Union: Debe realizar la unión entre dos bases de datos"
+    mock_directory, content = setup_mock_directory
+    second_content = {
+        "UUID(8b9b3915-4793-4628-8c52-4be1c456d575)": {
+            "nombre": {"_type": "str", "value": "Max"},
+            "especie": {"_type": "str", "value": "Perro"},
+            "edad": {"_type": "int", "value": 4},
+            "raza": {"_type": "str", "value": "Bulldog"}
+        }
+    }
+    result = union(content, second_content)
+    assert isinstance(result, list)
+
+
+def test_intersection_databases(setup_mock_directory):
+    "Intersection: Debe devolver la intersección de dos bases de datos"
+    mock_directory, content = setup_mock_directory
+    second_content = {
+        "UUID(929fb381-c97a-46bf-bf9f-af96d626063e)": {
+            "nombre": {"_type": "str", "value": "Negra"},
+            "especie": {"_type": "str", "value": "Gato"},
+            "edad": {"_type": "int", "value": 3},
+            "raza": {"_type": "str", "value": "Siames"}
+        },
+        "UUID(8b9b3915-4793-4628-8c52-4be1c456d575)": {
+            "nombre": {"_type": "str", "value": "Max"},
+            "especie": {"_type": "str", "value": "Perro"},
+            "edad": {"_type": "int", "value": 4},
+            "raza": {"_type": "str", "value": "Bulldog"}
+        }
+    }
+    result = intersection(content, second_content)
+    assert len(result) == 1  
+
+
+def test_difference_databases(setup_mock_directory):
+    "Difference: Debe devolver la diferencia entre dos bases de datos"
+    mock_directory, content = setup_mock_directory
+    second_content = {
+        "UUID(8b9b3915-4793-4628-8c52-4be1c456d575)": {
+            "nombre": {"_type": "str", "value": "Max"},
+            "especie": {"_type": "str", "value": "Perro"},
+            "edad": {"_type": "int", "value": 4},
+            "raza": {"_type": "str", "value": "Bulldog"}
+        }
+    }
+    result = difference(content, second_content)
+    assert len(result) == 2
+
+def test_symmetric_difference_databases(setup_mock_directory):
+    "Symmetric Difference: Debe devolver la diferencia simétrica entre dos bases de datos"
+    mock_directory, content = setup_mock_directory
+    second_content = {
+        "UUID(8b9b3915-4793-4628-8c52-4be1c456d575)": {
+            "nombre": {"_type": "str", "value": "Max"},
+            "especie": {"_type": "str", "value": "Perro"},
+            "edad": {"_type": "int", "value": 4},
+            "raza": {"_type": "str", "value": "Bulldog"}
+        }
+    }
+    result = symmetric_difference(content, second_content)
+    assert len(result) == 3  
