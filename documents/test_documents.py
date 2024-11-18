@@ -59,6 +59,13 @@ def test_search_by_regex():
         assert "doc2" in matches
 
         assert "doc3" not in matches
+    
+def test_search_by_regex_invalid_pattern():
+    with patch('builtins.input', return_value="*invalid[regex"):
+        try:
+            search_by_regex(DATABASE)
+        except ValueError as e:
+            assert str(e) == "Expresión regular inválida"
 
 def test_edit_document():
     doc_id = uuid.uuid4()
@@ -74,6 +81,15 @@ def test_edit_document():
     assert result is True
     assert DATABASE[doc_id]["name"] == {'_type': 'str', 'value': 'Editado'}
 
+def test_edit_nonexistent_document():
+    with patch('builtins.input', side_effect=[
+        str(uuid.uuid4()),  # ID inexistente
+        "name",            # Campo
+        "NuevoValor"       # Valor
+    ]):
+        result = edit(DATABASE)
+        assert result is False
+
 def test_delete_document():
 
     doc_id = uuid.uuid4()
@@ -84,6 +100,13 @@ def test_delete_document():
     
     assert doc_id not in DATABASE
 
+def test_delete_nonexistent_document():
+    with patch('builtins.input', return_value=str(uuid.uuid4())):
+        try:
+            delete(DATABASE)
+        except KeyError as e:
+            assert "No se encontró ningún documento con el ID" in str(e)
+
 def test_filter_by_id():
     doc_id = uuid.uuid4()  
     DATABASE[doc_id] = {"name": "Prueba"}
@@ -93,3 +116,10 @@ def test_filter_by_id():
     
     assert result_id == doc_id  
     assert document["name"] == "Prueba" 
+
+def test_filter_by_nonexistent_id():
+    with patch('builtins.input', return_value=str(uuid.uuid4())):
+        try:
+            filter_by_id(DATABASE)
+        except KeyError as e:
+            assert "No se encontró ningún documento con el ID" in str(e)
