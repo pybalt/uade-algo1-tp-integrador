@@ -2,7 +2,7 @@ import os
 import json
 import pytest
 import uuid
-from database.functions import save, delete,union, intersection, difference, symmetric_difference, str_to_uuid, uuid_to_str
+from database.functions import save,create, delete,access, union,hashable_value,frozenset_to_readable, intersection, difference, symmetric_difference, str_to_uuid, uuid_to_str
 
 @pytest.fixture
 def setup_mock_directory():
@@ -42,6 +42,24 @@ def setup_mock_directory():
         os.remove("test/directory.json")
     if os.path.exists("test"):
         os.rmdir("test")
+
+def test_create_new_database(setup_mock_directory):
+    "Create: Debe crear una nueva base de datos con el nombre especificado"
+    mock_directory, _ = setup_mock_directory
+    create("nueva_base", mock_directory)
+    
+    assert "nueva_base" in mock_directory
+    assert os.path.exists(mock_directory["nueva_base"])
+    
+    with open(mock_directory["nueva_base"], 'r') as f:
+        content = json.load(f)
+        assert content == {}
+
+def test_create_existing_database(setup_mock_directory):
+    "Create: Debe lanzar un error si la base de datos ya existe"
+    mock_directory, _ = setup_mock_directory
+    with pytest.raises(AssertionError):
+        create("mascotas", mock_directory)
 
 def test_save_mascotas_database(setup_mock_directory):
     "Save: Debe guardar el contenido en un archivo JSON"
@@ -102,6 +120,63 @@ def test_delete_and_save_directory(setup_mock_directory):
     with open("test/directory.json", 'r') as f:
         saved_directory = json.load(f)
         assert saved_directory == mock_directory
+
+from unittest.mock import patch
+
+@patch('console.show_options_menu', return_value='mascotas')
+def test_access_existing_database(mock_show_options_menu, setup_mock_directory):
+    "Access: Debe acceder correctamente a una base de datos existente"
+    mock_directory, _ = setup_mock_directory
+    db, db_name = access(mock_directory)
+    
+    assert db_name == 'mascotas'
+    
+    assert db  
+
+@patch('console.show_options_menu', return_value='no_existe')
+def test_access_non_existing_database(mock_show_options_menu, setup_mock_directory):
+    "Access: Debe lanzar un error si la base de datos no existe"
+    mock_directory, _ = setup_mock_directory
+    with pytest.raises(AssertionError):
+        access(mock_directory)
+
+def test_hashable_value_dict():
+    "hashable_value: Debe convertir un diccionario en un objeto hashable"
+    value = {
+        "nombre": "Max",
+        "edad": 4,
+        "raza": "Bulldog"
+    }
+    result = hashable_value(value)
+    assert isinstance(result, frozenset)
+
+def test_hashable_value_list():
+    "hashable_value: Debe convertir una lista en un objeto hashable"
+    value = ["Max", "Bulldog", 4]
+    result = hashable_value(value)
+    assert isinstance(result, tuple)
+
+def test_hashable_value_primitive():
+    "hashable_value: Debe devolver el valor original si es un tipo primitivo"
+    result = hashable_value("Max")
+    assert result == "Max"
+
+def test_frozenset_to_readable_dict():
+    "frozenset_to_readable: Debe convertir un frozenset de vuelta a un diccionario legible"
+    value = frozenset({
+        ("nombre", "Max"),
+        ("edad", 4),
+        ("raza", "Bulldog")
+    })
+    result = frozenset_to_readable(value)
+    assert isinstance(result, dict)
+    assert result == {"nombre": "Max", "edad": 4, "raza": "Bulldog"}
+
+def test_frozenset_to_readable_list():
+    "frozenset_to_readable: Debe convertir un frozenset de tuplas en una lista legible"
+    value = frozenset([("nombre", "Max"), ("edad", 4), ("raza", "Bulldog")])
+    result = frozenset_to_readable(value)
+    assert result == {"nombre": "Max", "edad": 4, "raza": "Bulldog"}
 
 def test_str_to_uuid():
     "str_to_uuid: Debe convertir las claves UUID de cadena a uuid.UUID"
