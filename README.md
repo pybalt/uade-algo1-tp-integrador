@@ -77,6 +77,7 @@ El proyecto incluye flujos de trabajo de GitHub Actions para:
 - Verificación de características por sprint
 - Pruebas unitarias
 - Cobertura de código
+- Deployment de coverage
 
 ## Instalación
 
