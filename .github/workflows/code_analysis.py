@@ -53,7 +53,7 @@ def analyze_code(code):
         elif isinstance(node, ast.Import):
             if "re" in [alias.name for alias in node.names]:
                 results["regex"] = True
-            if "unittest" in [alias.name for alias in node.names]:
+            if "pytest" in [alias.name for alias in node.names]:
                 results["unit_tests"] = True
 
     def is_recursive(function_def):
