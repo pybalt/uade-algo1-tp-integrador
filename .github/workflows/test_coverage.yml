@@ -1,0 +1,70 @@
+name: Check test coverage
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-cov coverage coverage-badge
+
+    - name: Run tests with coverage
+      continue-on-error: true
+      run: |
+          pytest --cov=database --cov=documents --cov=utils --cov-report=html --cov-report=term
+
+    - name: Generate coverage badge
+      run: |
+        coverage-badge -o coverage.svg
+
+    - name: Update README.md with coverage badge
+      run: |
+        echo "![Coverage](./coverage.svg)" > README.md
+
+    - name: Set GitHub user
+      run: |
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+
+    - name: Create gh-pages branch if not exists
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git fetch origin
+        if ! git show-ref --verify --quiet refs/heads/gh-pages; then
+          git checkout --orphan gh-pages
+          git reset --hard
+          git commit --allow-empty -m "Initial gh-pages commit"
+          git push --force origin gh-pages
+        else
+          git checkout gh-pages
+          git pull origin gh-pages
+        fi
+
+    - name: Copy coverage files
+      continue-on-error: true
+      run: |
+        cp -rf htmlcov/* .
+        cp -f coverage.svg .
+        cp -f README.md .
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: .

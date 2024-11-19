@@ -75,6 +75,7 @@ def delete(database_name: str, directory: dict):
     del directory[database_name]
 
 
+
 def access(directory: dict) -> tuple[dict, str]:
     """
     Accesses a database in the given directory.
