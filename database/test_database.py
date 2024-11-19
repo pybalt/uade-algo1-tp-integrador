@@ -186,20 +186,28 @@ def test_uuid_to_str():
     assert list(result.keys())[0] == "UUID(929fb381-c97a-46bf-bf9f-af96d626063e)"
     assert result["UUID(929fb381-c97a-46bf-bf9f-af96d626063e)"] == "valor1"
     assert result["otra_clave"] == "valor2"
-
-def test_union_databases(setup_mock_directory):
-    "Union: Debe realizar la unión entre dos bases de datos"
-    mock_directory, content = setup_mock_directory
-    second_content = {
-        "UUID(8b9b3915-4793-4628-8c52-4be1c456d575)": {
-            "nombre": {"_type": "str", "value": "Max"},
-            "especie": {"_type": "str", "value": "Perro"},
-            "edad": {"_type": "int", "value": 4},
-            "raza": {"_type": "str", "value": "Bulldog"}
+    def test_union_databases(setup_mock_directory):
+        "Union: Debe realizar la unión entre dos bases de datos y convertirla en una lista para graficar"
+        mock_directory, content = setup_mock_directory
+        second_content = {
+            "UUID(8b9b3915-4793-4628-8c52-4be1c456d575)": {
+                "nombre": {"_type": "str", "value": "Max"},
+                "especie": {"_type": "str", "value": "Perro"},
+                "edad": {"_type": "int", "value": 4},
+                "raza": {"_type": "str", "value": "Bulldog"}
+            }
         }
-    }
-    result = union(content, second_content)
-    assert isinstance(result, list)
+        union_result = union(content, second_content)
+        result = list(union_result.values())
+        
+        assert isinstance(result, list), "El resultado de la unión debe ser una lista."
+        
+        expected_keys = set(content.keys()).union(second_content.keys())
+        result_keys = set(union_result.keys())
+        assert result_keys == expected_keys, "La unión no contiene las claves esperadas."
+
+        for key in second_content:
+            assert any(item == second_content[key] for item in union_result.values()), f"La clave {key} no está en el resultado de la unión."
 
 
 def test_intersection_databases(setup_mock_directory):
