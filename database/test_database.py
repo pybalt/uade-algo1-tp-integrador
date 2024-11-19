@@ -7,7 +7,7 @@ from database.functions import (
     union,hashable_value,frozenset_to_readable,
     intersection, difference, symmetric_difference,
     str_to_uuid, uuid_to_str
-    )
+)
 
 @pytest.fixture
 def setup_mock_directory():
